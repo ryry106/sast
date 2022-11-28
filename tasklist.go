@@ -22,18 +22,19 @@ type SPDaily struct {
 	SP int
 }
 
+// todo 日付のリストを作成するメソッドに切り出し
+// todo 日付のリストを元にcreateDtを見てSPを加算するメソッドを切り出し
+// todo 日付のリストを元にFixedDtを見てSPを減算するメソッドを切り出す
 func (tl *TaskList) SPDaily(now time.Time) *SPDailyList {
 	mostEarlyDt := tl.mostEarlyDt(now)
-	diffDays := int(now.Sub(mostEarlyDt).Hours()/24) + 1
+	diffDays := diffDays(mostEarlyDt, now)
 
 	spdailyList := make([]SPDaily, diffDays, diffDays)
-
 	for i := 0; i < diffDays; i++ {
 		spdailyList[i].Dt = mostEarlyDt.AddDate(0, 0, i)
 	}
 
 	return &SPDailyList{spdailyList}
-
 }
 
 func (tl *TaskList) mostEarlyDt(now time.Time) time.Time {
