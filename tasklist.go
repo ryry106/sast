@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"time"
 )
 
@@ -23,8 +22,23 @@ type SPDaily struct {
 	SP int
 }
 
-func (tl *TaskList) SPDaily() {
-
-	fmt.Println("test")
+func (tl *TaskList) SPDaily() *SPDailyList {
+	var timeJst, _ = time.LoadLocation("Asia/Tokyo")
+	return &SPDailyList{
+		[]SPDaily{
+			{
+				Dt: time.Date(2022, 11, 20, 0, 0, 0, 0, timeJst),
+				SP: 1,
+			},
+			{
+				Dt: time.Date(2022, 11, 21, 0, 0, 0, 0, timeJst),
+				SP: 2,
+			},
+			{
+				Dt: time.Date(2022, 11, 22, 0, 0, 0, 0, timeJst),
+				SP: 3,
+			},
+		},
+	}
 
 }
