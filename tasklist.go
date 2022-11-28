@@ -42,3 +42,13 @@ func (tl *TaskList) SPDaily() *SPDailyList {
 	}
 
 }
+
+func (tl *TaskList) mostEarlyDt(now time.Time) time.Time {
+	var mostEarlyDt = now
+	for _, task := range tl.List {
+		if mostEarlyDt.After(task.CreateDt) {
+			mostEarlyDt = task.CreateDt
+		}
+	}
+	return mostEarlyDt
+}
