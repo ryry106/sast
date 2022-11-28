@@ -22,24 +22,20 @@ type SPDaily struct {
 	SP int
 }
 
+// todo nowを引数
 func (tl *TaskList) SPDaily() *SPDailyList {
 	var timeJst, _ = time.LoadLocation("Asia/Tokyo")
-	return &SPDailyList{
-		[]SPDaily{
-			{
-				Dt: time.Date(2022, 11, 20, 0, 0, 0, 0, timeJst),
-				SP: 1,
-			},
-			{
-				Dt: time.Date(2022, 11, 21, 0, 0, 0, 0, timeJst),
-				SP: 2,
-			},
-			{
-				Dt: time.Date(2022, 11, 22, 0, 0, 0, 0, timeJst),
-				SP: 3,
-			},
-		},
+	now := time.Date(2022, 11, 28, 0, 0, 0, 0, timeJst)
+	mostEarlyDt := tl.mostEarlyDt(now)
+	diffDays := int(now.Sub(mostEarlyDt).Hours() / 24) + 1
+
+	spdailyList := make([]SPDaily, diffDays, diffDays)
+
+	for i := 0; i < diffDays; i++ {
+		spdailyList[i].Dt = mostEarlyDt.AddDate(0, 0, i)
 	}
+
+	return &SPDailyList{spdailyList}
 
 }
 

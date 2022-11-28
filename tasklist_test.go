@@ -9,46 +9,43 @@ import (
 var timeJst, _ = time.LoadLocation("Asia/Tokyo")
 
 func TestSPDaily(t *testing.T) {
-	tasklist := &TaskList{
-		[]Task{
-			{
-				Name:     "first",
-				CreateDt: time.Date(2022, 11, 20, 0, 0, 0, 0, timeJst),
-				SP:       1,
+	tt := []struct {
+		name     string
+		tasklist TaskList
+		now      time.Time
+		expects  *SPDailyList
+	}{
+		{
+			name: "20 - 28",
+			tasklist: TaskList{
+				[]Task{
+					{Name: "first", CreateDt: time.Date(2022, 11, 21, 0, 0, 0, 0, timeJst), SP: 1},
+					{Name: "second", CreateDt: time.Date(2022, 11, 20, 0, 0, 0, 0, timeJst), SP: 1},
+					{Name: "third", CreateDt: time.Date(2022, 11, 22, 0, 0, 0, 0, timeJst), SP: 1},
+				},
 			},
-			{
-				Name:     "second",
-				CreateDt: time.Date(2022, 11, 21, 0, 0, 0, 0, timeJst),
-				SP:       1,
-			},
-			{
-				Name:     "third",
-				CreateDt: time.Date(2022, 11, 22, 0, 0, 0, 0, timeJst),
-				SP:       1,
-			},
-		},
-	}
-
-	expects := &SPDailyList{
-		[]SPDaily{
-			{
-				Dt: time.Date(2022, 11, 20, 0, 0, 0, 0, timeJst),
-				SP: 1,
-			},
-			{
-				Dt: time.Date(2022, 11, 21, 0, 0, 0, 0, timeJst),
-				SP: 2,
-			},
-			{
-				Dt: time.Date(2022, 11, 22, 0, 0, 0, 0, timeJst),
-				SP: 3,
+			now: time.Date(2022, 11, 28, 0, 0, 0, 0, timeJst),
+			expects: &SPDailyList{
+				[]SPDaily{
+					{Dt: time.Date(2022, 11, 20, 0, 0, 0, 0, timeJst)},
+					{Dt: time.Date(2022, 11, 21, 0, 0, 0, 0, timeJst)},
+					{Dt: time.Date(2022, 11, 22, 0, 0, 0, 0, timeJst)},
+					{Dt: time.Date(2022, 11, 23, 0, 0, 0, 0, timeJst)},
+					{Dt: time.Date(2022, 11, 24, 0, 0, 0, 0, timeJst)},
+					{Dt: time.Date(2022, 11, 25, 0, 0, 0, 0, timeJst)},
+					{Dt: time.Date(2022, 11, 26, 0, 0, 0, 0, timeJst)},
+					{Dt: time.Date(2022, 11, 27, 0, 0, 0, 0, timeJst)},
+					{Dt: time.Date(2022, 11, 28, 0, 0, 0, 0, timeJst)},
+				},
 			},
 		},
 	}
 
-	actual := tasklist.SPDaily()
-	if !reflect.DeepEqual(expects, actual) {
-		t.Errorf("expects: %v,actual: %v", expects, actual)
+	for _, test := range tt {
+		actual := test.tasklist.SPDaily()
+		if !reflect.DeepEqual(test.expects, actual) {
+			t.Errorf("%s is fail. expects: %v,actual: %v", test.name, test.expects, actual)
+		}
 	}
 }
 
