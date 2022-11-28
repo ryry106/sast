@@ -24,7 +24,7 @@ func TestSPDaily(t *testing.T) {
 					{Name: "third", CreateDt: time.Date(2022, 11, 22, 0, 0, 0, 0, timeJst), SP: 1},
 				},
 			},
-			now: time.Date(2022, 11, 28, 0, 0, 0, 0, timeJst),
+			now: time.Date(2022, 11, 25, 0, 0, 0, 0, timeJst),
 			expects: &SPDailyList{
 				[]SPDaily{
 					{Dt: time.Date(2022, 11, 20, 0, 0, 0, 0, timeJst)},
@@ -33,16 +33,13 @@ func TestSPDaily(t *testing.T) {
 					{Dt: time.Date(2022, 11, 23, 0, 0, 0, 0, timeJst)},
 					{Dt: time.Date(2022, 11, 24, 0, 0, 0, 0, timeJst)},
 					{Dt: time.Date(2022, 11, 25, 0, 0, 0, 0, timeJst)},
-					{Dt: time.Date(2022, 11, 26, 0, 0, 0, 0, timeJst)},
-					{Dt: time.Date(2022, 11, 27, 0, 0, 0, 0, timeJst)},
-					{Dt: time.Date(2022, 11, 28, 0, 0, 0, 0, timeJst)},
 				},
 			},
 		},
 	}
 
 	for _, test := range tt {
-		actual := test.tasklist.SPDaily()
+		actual := test.tasklist.SPDaily(test.now)
 		if !reflect.DeepEqual(test.expects, actual) {
 			t.Errorf("%s is fail. expects: %v,actual: %v", test.name, test.expects, actual)
 		}
@@ -83,5 +80,13 @@ func TestMostEarlyDt(t *testing.T) {
 		if !actual.Equal(test.expects) {
 			t.Errorf("%s is fail. expects: %v,actual: %v", test.name, test.expects, actual)
 		}
+	}
+}
+
+func TestDiffDays(t *testing.T) {
+	expects := 5
+	actual := diffDays(time.Date(2022, 11, 23, 0, 0, 0, 0, timeJst), time.Date(2022, 11, 27, 0, 0, 0, 0, timeJst))
+	if expects != actual {
+		t.Errorf("fail. %d, %d", expects, actual)
 	}
 }
