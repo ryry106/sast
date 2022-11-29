@@ -39,7 +39,7 @@ func TestToSPDailyListOnlyDt(t *testing.T) {
 	}
 
 	for _, test := range tt {
-		actual := test.tasklist.SPDaily(test.now)
+		actual := test.tasklist.toSPDailyListOnlyDt(test.now)
 		if !reflect.DeepEqual(test.expects, actual) {
 			t.Errorf("%s is fail. expects: %v,actual: %v", test.name, test.expects, actual)
 		}

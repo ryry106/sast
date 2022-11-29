@@ -22,6 +22,7 @@ type SPDaily struct {
 	SP int
 }
 
+// todo TaskListとSPDailyListを分割
 // todo 日付のリストを元にcreateDtを見てSPを加算するメソッドを切り出し
 // todo 日付のリストを元にFixedDtを見てSPを減算するメソッドを切り出す
 func (tl *TaskList) SPDaily(now time.Time) *SPDailyList {
