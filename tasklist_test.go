@@ -9,8 +9,37 @@ import (
 var timeJst, _ = time.LoadLocation("Asia/Tokyo")
 
 func TestAddSPFromCreateDt(t *testing.T) {
-	tl := TaskList{}
-	tl.addSPFromCreateDt(SPDailyList{})
+	tl := TaskList{
+		[]Task{
+			{Name: "first", CreateDt: time.Date(2022, 11, 21, 0, 0, 0, 0, timeJst), SP: 1},
+			{Name: "second", CreateDt: time.Date(2022, 11, 23, 0, 0, 0, 0, timeJst), SP: 1},
+			{Name: "third", CreateDt: time.Date(2022, 11, 25, 0, 0, 0, 0, timeJst), SP: 1},
+		},
+	}
+	spdl := SPDailyList{
+		[]SPDaily{
+			{Dt: time.Date(2022, 11, 20, 0, 0, 0, 0, timeJst)},
+			{Dt: time.Date(2022, 11, 21, 0, 0, 0, 0, timeJst)},
+			{Dt: time.Date(2022, 11, 22, 0, 0, 0, 0, timeJst)},
+			{Dt: time.Date(2022, 11, 23, 0, 0, 0, 0, timeJst)},
+			{Dt: time.Date(2022, 11, 24, 0, 0, 0, 0, timeJst)},
+			{Dt: time.Date(2022, 11, 25, 0, 0, 0, 0, timeJst)},
+		},
+	}
+	expects := SPDailyList{
+		[]SPDaily{
+			{Dt: time.Date(2022, 11, 20, 0, 0, 0, 0, timeJst), SP: 0},
+			{Dt: time.Date(2022, 11, 21, 0, 0, 0, 0, timeJst), SP: 1},
+			{Dt: time.Date(2022, 11, 22, 0, 0, 0, 0, timeJst), SP: 1},
+			{Dt: time.Date(2022, 11, 23, 0, 0, 0, 0, timeJst), SP: 2},
+			{Dt: time.Date(2022, 11, 24, 0, 0, 0, 0, timeJst), SP: 2},
+			{Dt: time.Date(2022, 11, 25, 0, 0, 0, 0, timeJst), SP: 3},
+		},
+	}
+	actual := tl.addSPFromCreateDt(spdl)
+	if !reflect.DeepEqual(expects, *actual) {
+		t.Errorf("fail. expects: %v,actual: %v", expects, actual)
+	}
 }
 
 func TestToSPDailyListOnlyDt(t *testing.T) {
