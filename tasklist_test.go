@@ -8,7 +8,7 @@ import (
 
 var timeJst, _ = time.LoadLocation("Asia/Tokyo")
 
-func TestSPDaily(t *testing.T) {
+func TestToSPDailyListOnlyDt(t *testing.T) {
 	tt := []struct {
 		name     string
 		tasklist TaskList

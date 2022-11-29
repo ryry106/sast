@@ -22,10 +22,15 @@ type SPDaily struct {
 	SP int
 }
 
-// todo 日付のリストを作成するメソッドに切り出し
 // todo 日付のリストを元にcreateDtを見てSPを加算するメソッドを切り出し
 // todo 日付のリストを元にFixedDtを見てSPを減算するメソッドを切り出す
 func (tl *TaskList) SPDaily(now time.Time) *SPDailyList {
+	spdailyList := tl.toSPDailyListOnlyDt(now)
+
+	return spdailyList
+}
+
+func (tl *TaskList) toSPDailyListOnlyDt(now time.Time) *SPDailyList {
 	mostEarlyDt := tl.mostEarlyDt(now)
 	diffDays := diffDays(mostEarlyDt, now)
 
