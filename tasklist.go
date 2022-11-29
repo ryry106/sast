@@ -22,6 +22,10 @@ func (tl *TaskList) SPDaily(now time.Time) *SPDailyList {
 	return spdailyList
 }
 
+func (tl *TaskList) addSPFromCreateDt(spdl SPDailyList) *SPDailyList {
+  return &spdl
+}
+
 func (tl *TaskList) toSPDailyListOnlyDt(now time.Time) *SPDailyList {
 	mostEarlyDt := tl.mostEarlyDt(now)
 	diffDays := diffDays(mostEarlyDt, now)
