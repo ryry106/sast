@@ -14,18 +14,16 @@ type Task struct {
 	FixedDt  time.Time
 }
 
-// todo 日付のリストを元にFixedDtを見てSPを減算するメソッドを切り出す
 func (tl *TaskList) SPDaily(now time.Time) *SPDailyList {
 	spdailyList := tl.toSPDailyListOnlyDt(now)
-	spdailyList = tl.addSPFromCreateDt(*spdailyList)
-
-	return spdailyList
+	return tl.calculateSP(*spdailyList)
 }
 
-func (tl *TaskList) addSPFromCreateDt(spdl SPDailyList) *SPDailyList {
+func (tl *TaskList) calculateSP(spdl SPDailyList) *SPDailyList {
 	for _, task := range tl.List {
 		for i, spd := range spdl.List {
-			if !task.CreateDt.After(spd.Dt) {
+			// todo ここの判定は切り出せそう
+			if !task.CreateDt.After(spd.Dt) && (task.FixedDt.IsZero() || task.FixedDt.After(spd.Dt)) {
 				spdl.List[i].SP += task.SP
 			}
 		}
