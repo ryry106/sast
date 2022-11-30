@@ -8,7 +8,6 @@ type TaskList struct {
 	List []Task
 }
 type Task struct {
-	Name     string
 	SP       int
 	CreateDt time.Time
 	FixedDt  time.Time
@@ -22,13 +21,24 @@ func (tl *TaskList) SPDaily(now time.Time) *SPDailyList {
 func (tl *TaskList) calculateSP(spdl SPDailyList) *SPDailyList {
 	for _, task := range tl.List {
 		for i, spd := range spdl.List {
-			// todo ここの判定は切り出せそう
-			if !task.CreateDt.After(spd.Dt) && (task.FixedDt.IsZero() || task.FixedDt.After(spd.Dt)) {
+			if isAddSP(spd.Dt, task) {
 				spdl.List[i].SP += task.SP
 			}
 		}
 	}
 	return &spdl
+}
+
+func isAddSP(addTargetDt time.Time, task Task) bool {
+	// タスク生成日がSP加算日付よりも後に生成された
+	if task.CreateDt.After(addTargetDt) {
+		return false
+	}
+	// タスク完了日がSP加算対象日よりも前に設定されている
+	if !task.FixedDt.IsZero() && !task.FixedDt.After(addTargetDt) {
+		return false
+	}
+	return true
 }
 
 func (tl *TaskList) toSPDailyListOnlyDt(now time.Time) *SPDailyList {

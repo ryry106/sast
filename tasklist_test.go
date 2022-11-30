@@ -11,9 +11,9 @@ var timeJst, _ = time.LoadLocation("Asia/Tokyo")
 func TestCalculateSP(t *testing.T) {
 	tl := TaskList{
 		[]Task{
-			{Name: "first", CreateDt: time.Date(2022, 11, 21, 0, 0, 0, 0, timeJst), FixedDt: time.Date(2022, 11, 22, 0, 0, 0, 0, timeJst), SP: 1},
-			{Name: "second", CreateDt: time.Date(2022, 11, 23, 0, 0, 0, 0, timeJst), SP: 1},
-			{Name: "third", CreateDt: time.Date(2022, 11, 25, 0, 0, 0, 0, timeJst), SP: 1},
+			{CreateDt: time.Date(2022, 11, 21, 0, 0, 0, 0, timeJst), FixedDt: time.Date(2022, 11, 22, 0, 0, 0, 0, timeJst), SP: 1},
+			{CreateDt: time.Date(2022, 11, 23, 0, 0, 0, 0, timeJst), SP: 1},
+			{CreateDt: time.Date(2022, 11, 25, 0, 0, 0, 0, timeJst), SP: 1},
 		},
 	}
 	spdl := SPDailyList{
@@ -53,9 +53,9 @@ func TestToSPDailyListOnlyDt(t *testing.T) {
 			name: "20 - 28",
 			tasklist: TaskList{
 				[]Task{
-					{Name: "first", CreateDt: time.Date(2022, 11, 21, 0, 0, 0, 0, timeJst), SP: 1},
-					{Name: "second", CreateDt: time.Date(2022, 11, 20, 0, 0, 0, 0, timeJst), SP: 1},
-					{Name: "third", CreateDt: time.Date(2022, 11, 22, 0, 0, 0, 0, timeJst), SP: 1},
+					{CreateDt: time.Date(2022, 11, 21, 0, 0, 0, 0, timeJst), SP: 1},
+					{CreateDt: time.Date(2022, 11, 20, 0, 0, 0, 0, timeJst), SP: 1},
+					{CreateDt: time.Date(2022, 11, 22, 0, 0, 0, 0, timeJst), SP: 1},
 				},
 			},
 			now: time.Date(2022, 11, 25, 0, 0, 0, 0, timeJst),
@@ -91,9 +91,9 @@ func TestMostEarlyDt(t *testing.T) {
 			name: "second is early date",
 			tasklist: TaskList{
 				[]Task{
-					{Name: "first", CreateDt: time.Date(2022, 11, 21, 0, 0, 0, 0, timeJst), SP: 1},
-					{Name: "second", CreateDt: time.Date(2022, 11, 20, 0, 0, 0, 0, timeJst), SP: 1},
-					{Name: "third", CreateDt: time.Date(2022, 11, 22, 0, 0, 0, 0, timeJst), SP: 1},
+					{CreateDt: time.Date(2022, 11, 21, 0, 0, 0, 0, timeJst), SP: 1},
+					{CreateDt: time.Date(2022, 11, 20, 0, 0, 0, 0, timeJst), SP: 1},
+					{CreateDt: time.Date(2022, 11, 22, 0, 0, 0, 0, timeJst), SP: 1},
 				},
 			},
 			now:     time.Date(2022, 11, 28, 0, 0, 0, 0, timeJst),
