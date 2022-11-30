@@ -13,7 +13,7 @@ type Task struct {
 	FixedDt  time.Time
 }
 
-func (tl *TaskList) SPDaily(now time.Time) *SPDailyList {
+func (tl *TaskList) ToSPDaily(now time.Time) *SPDailyList {
 	spdailyList := tl.toSPDailyListOnlyDt(now)
 	return tl.calculateSP(*spdailyList)
 }
@@ -27,18 +27,6 @@ func (tl *TaskList) calculateSP(spdl SPDailyList) *SPDailyList {
 		}
 	}
 	return &spdl
-}
-
-func isAddSP(addTargetDt time.Time, task Task) bool {
-	// タスク生成日がSP加算日付よりも後に生成された
-	if task.CreateDt.After(addTargetDt) {
-		return false
-	}
-	// タスク完了日がSP加算対象日よりも前に設定されている
-	if !task.FixedDt.IsZero() && !task.FixedDt.After(addTargetDt) {
-		return false
-	}
-	return true
 }
 
 func (tl *TaskList) toSPDailyListOnlyDt(now time.Time) *SPDailyList {
@@ -61,6 +49,18 @@ func (tl *TaskList) mostEarlyDt(now time.Time) time.Time {
 		}
 	}
 	return mostEarlyDt
+}
+
+func isAddSP(addTargetDt time.Time, task Task) bool {
+	// タスク生成日がSP加算日付よりも後に生成された
+	if task.CreateDt.After(addTargetDt) {
+		return false
+	}
+	// タスク完了日がSP加算対象日よりも前に設定されている
+	if !task.FixedDt.IsZero() && !task.FixedDt.After(addTargetDt) {
+		return false
+	}
+	return true
 }
 
 func diffDays(start time.Time, end time.Time) int {
