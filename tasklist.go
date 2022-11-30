@@ -14,7 +14,8 @@ type Task struct {
 }
 
 func (tl *TaskList) ToSPDaily(now time.Time) *SPDailyList {
-	spdailyList := tl.toSPDailyListOnlyDt(now)
+	mostEarlyDt := tl.mostEarlyDt(now)
+	spdailyList := NewSPDailyList(mostEarlyDt, now)
 	return tl.calculateSP(*spdailyList)
 }
 
@@ -27,18 +28,6 @@ func (tl *TaskList) calculateSP(spdl SPDailyList) *SPDailyList {
 		}
 	}
 	return &spdl
-}
-
-func (tl *TaskList) toSPDailyListOnlyDt(now time.Time) *SPDailyList {
-	mostEarlyDt := tl.mostEarlyDt(now)
-	diffDays := diffDays(mostEarlyDt, now)
-
-	spdailyList := make([]SPDaily, diffDays, diffDays)
-	for i := 0; i < diffDays; i++ {
-		spdailyList[i].Dt = mostEarlyDt.AddDate(0, 0, i)
-	}
-
-	return &SPDailyList{spdailyList}
 }
 
 func (tl *TaskList) mostEarlyDt(now time.Time) time.Time {
@@ -61,8 +50,4 @@ func isAddSP(addTargetDt time.Time, task Task) bool {
 		return false
 	}
 	return true
-}
-
-func diffDays(start time.Time, end time.Time) int {
-	return int(end.Sub(start).Hours()/24) + 1
 }
