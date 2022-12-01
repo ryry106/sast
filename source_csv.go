@@ -18,14 +18,19 @@ func ToTaskList(path string) (*TaskList, error) {
 	list := []Task{}
 	s := bufio.NewScanner(fp)
 	for s.Scan() {
-		line := strings.Split(s.Text(), ",")
-		sp, _ := strconv.Atoi(line[0])
-		createDt := convertDt(line[1])
-		fixedDt := convertDt(line[2])
-		list = append(list, Task{SP: sp, CreateDt: createDt, FixedDt: fixedDt})
+		sp, cd, fd := lineParse(s.Text())
+		list = append(list, Task{SP: sp, CreateDt: cd, FixedDt: fd})
 	}
 
 	return &TaskList{List: list}, nil
+}
+
+func lineParse(line string) (int, time.Time, time.Time) {
+	la := strings.Split(line, ",")
+	sp := convertSP(la[0])
+	createDt := convertDt(la[1])
+	fixedDt := convertDt(la[2])
+	return sp, createDt, fixedDt
 }
 
 func convertDt(lineUnit string) time.Time {
@@ -35,4 +40,12 @@ func convertDt(lineUnit string) time.Time {
 		return time.Time{}
 	}
 	return dt
+}
+
+func convertSP(lineUnit string) int {
+	sp, err := strconv.Atoi(lineUnit)
+	if err != nil {
+		return 0
+	}
+	return sp
 }
