@@ -5,6 +5,6 @@
 
 ### example
 ```
-$ go run . --target-file="<path>"
+$ go run . preview --target-file="<path>"
 preview to http://localhost:8080/bd
 ```
