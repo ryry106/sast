@@ -1,6 +1,9 @@
 package main
 
-import "time"
+import (
+	"encoding/json"
+	"time"
+)
 
 type SPDailyList struct {
 	List []SPDaily
@@ -17,6 +20,11 @@ func NewSPDailyList(start time.Time, end time.Time) *SPDailyList {
 		spdailyList[i].Dt = start.AddDate(0, 0, i)
 	}
 	return &SPDailyList{spdailyList}
+}
+
+func (sl *SPDailyList) ToJson() string {
+	j, _ := json.Marshal(sl)
+	return string(j)
 }
 
 func diffDays(start time.Time, end time.Time) int {
