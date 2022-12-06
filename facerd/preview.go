@@ -2,7 +2,9 @@ package facerd
 
 import (
 	"fmt"
+	"io"
 	"net/http"
+	"os"
 	"ryry/prev-bdc/model"
 	"time"
 
@@ -31,7 +33,16 @@ func Run(csvPath string) {
 }
 
 func preview(c echo.Context) error {
-	return c.String(http.StatusOK, "Hello, World!")
+	f, err := os.Open("facerd/template.html")
+	if err != nil {
+		return c.String(http.StatusInternalServerError, "")
+	}
+	template, err := io.ReadAll(f)
+	if err != nil {
+		return c.String(http.StatusInternalServerError, "")
+	}
+	c.Response().Header().Set(echo.HeaderContentType, "text/html; charset=UTF-8")
+	return c.String(http.StatusOK, string(template))
 }
 
 type Resource struct {
