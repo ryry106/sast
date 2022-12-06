@@ -19,6 +19,9 @@ func ToTaskList(path string) (*TaskList, error) {
 	s := bufio.NewScanner(fp)
 	for s.Scan() {
 		sp, cd, fd := lineParse(s.Text())
+		if cd.IsZero() {
+			continue
+		}
 		list = append(list, Task{SP: sp, CreateDt: cd, FixedDt: fd})
 	}
 
