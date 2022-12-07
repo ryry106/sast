@@ -1,7 +1,6 @@
 package preview
 
 import (
-	"fmt"
 	"io"
 	"net/http"
 	"os"
@@ -24,7 +23,7 @@ func (s *Serv) Up() {
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
 
-	ph := &PrevHandler{templateHtmlPath: "facerd/template.html"}
+	ph := &PrevHandler{templateHtmlPath: "assets/template.html"}
 	rh := &ResourceHandler{csvPath: s.CsvPath}
 
 	// Routes
@@ -43,11 +42,11 @@ type PrevHandler struct {
 func (ph *PrevHandler) handle(c echo.Context) error {
 	f, err := os.Open(ph.templateHtmlPath)
 	if err != nil {
-		return c.String(http.StatusInternalServerError, "")
+		return c.String(http.StatusInternalServerError, err.Error())
 	}
 	template, err := io.ReadAll(f)
 	if err != nil {
-		return c.String(http.StatusInternalServerError, "")
+		return c.String(http.StatusInternalServerError, err.Error())
 	}
 	c.Response().Header().Set(echo.HeaderContentType, "text/html; charset=UTF-8")
 	return c.String(http.StatusOK, string(template))
@@ -60,12 +59,11 @@ type ResourceHandler struct {
 func (r *ResourceHandler) handle(c echo.Context) error {
 	tl, err := model.ToTaskList(r.csvPath)
 	if err != nil {
-		return c.String(http.StatusInternalServerError, "")
+		return c.String(http.StatusInternalServerError, err.Error())
 	}
-	fmt.Println(tl)
 	tz, err := time.LoadLocation("Asia/Tokyo")
 	if err != nil {
-		return c.String(http.StatusInternalServerError, "")
+		return c.String(http.StatusInternalServerError, err.Error())
 	}
 	return c.String(http.StatusOK, tl.ToSPDaily(time.Now().In(tz)).ToJson())
 }

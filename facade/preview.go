@@ -1,4 +1,4 @@
-package facerd
+package facade
 
 import (
 	"ryry/prev-bdc/preview"
