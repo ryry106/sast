@@ -1,6 +1,8 @@
 package preview
 
 import (
+	"fmt"
+
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 )
@@ -24,6 +26,12 @@ func (s *Serv) Up() {
 	e.GET("/preview", ph.handle)
 	e.GET("/resource", rh.handle)
 
+	dispPreviewPath()
+
 	// Start server
 	e.Logger.Fatal(e.Start(":8080"))
+}
+
+func dispPreviewPath() {
+	fmt.Println("preview to http://localhost:8080/preview")
 }

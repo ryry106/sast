@@ -1,10 +1,17 @@
-# feature
+# burndownchart
+## feature
 - 対象のcsvからバーンダウンチャートを表示する
 - csvのフォーマットは固定
 - エラーハンドリングはしない
 
-### example
+## Dependency
+- go 
+
+## Usage
 ```
-$ go run . preview <path>
-preview to http://localhost:8080/bd
+$ go run . preview <csv file path>
+```
+##### example
+```
+$ make preview_sample
 ```
