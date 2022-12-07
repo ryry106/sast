@@ -4,7 +4,7 @@ import (
 	"io"
 	"net/http"
 	"os"
-	"ryry/prev-bdc/model"
+	"burndownchart/model"
 	"time"
 
 	"github.com/labstack/echo"

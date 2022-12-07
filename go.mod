@@ -1,4 +1,4 @@
-module ryry/prev-bdc
+module burndownchart
 
 go 1.19
 

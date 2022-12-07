@@ -6,7 +6,7 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
-	"ryry/prev-bdc/preview"
+	"burndownchart/preview"
 )
 
 // previewCmd represents the preview command
