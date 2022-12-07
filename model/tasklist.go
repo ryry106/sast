@@ -5,6 +5,7 @@ import (
 )
 
 type TaskList struct {
+  Name string
 	List []Task
 }
 type Task struct {
@@ -15,7 +16,7 @@ type Task struct {
 
 func (tl *TaskList) ToSPDaily(now time.Time) *SPDailyList {
 	mostEarlyDt := tl.mostEarlyDt(now)
-	spdailyList := NewSPDailyList(mostEarlyDt, now)
+	spdailyList := NewSPDailyList(tl.Name, mostEarlyDt, now)
 	return tl.calculateSP(*spdailyList)
 }
 

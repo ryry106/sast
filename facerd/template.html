@@ -34,10 +34,10 @@
       res = JSON.parse(body)
       return {
         name: res.name,
-        sp_max: Math.max(res.List.map(elm => elm.SP)),
+        sp_max: Math.max(res.list.map(elm => elm.sp)),
         sp_list: [
           ['day', 'param'],
-        ].concat(res.List.map(elm => ["", elm.SP]))
+        ].concat(res.list.map(elm => ["", elm.sp]))
       }
     }
 

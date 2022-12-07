@@ -25,7 +25,7 @@ func ToTaskList(path string) (*TaskList, error) {
 		list = append(list, Task{SP: sp, CreateDt: cd, FixedDt: fd})
 	}
 
-	return &TaskList{List: list}, nil
+	return &TaskList{Name: path, List: list}, nil
 }
 
 func lineParse(line string) (int, time.Time, time.Time) {

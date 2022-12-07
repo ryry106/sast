@@ -8,9 +8,10 @@ import (
 
 var timeJst, _ = time.LoadLocation("Asia/Tokyo")
 
-func TestCalculateSP(t *testing.T) {
+func TestToSPDaily(t *testing.T) {
 	tl := TaskList{
-		[]Task{
+		Name: "TestToSPDaily",
+		List: []Task{
 			{CreateDt: time.Date(2022, 11, 21, 0, 0, 0, 0, timeJst), FixedDt: time.Date(2022, 11, 22, 0, 0, 0, 0, timeJst), SP: 1},
 			{CreateDt: time.Date(2022, 11, 23, 0, 0, 0, 0, timeJst), SP: 1},
 			{CreateDt: time.Date(2022, 11, 25, 0, 0, 0, 0, timeJst), SP: 1},
@@ -18,7 +19,8 @@ func TestCalculateSP(t *testing.T) {
 	}
 	now := time.Date(2022, 11, 25, 0, 0, 0, 0, timeJst)
 	expects := SPDailyList{
-		[]SPDaily{
+		Name: "TestToSPDaily",
+		List: []SPDaily{
 			{Dt: time.Date(2022, 11, 21, 0, 0, 0, 0, timeJst), SP: 1},
 			{Dt: time.Date(2022, 11, 22, 0, 0, 0, 0, timeJst), SP: 0},
 			{Dt: time.Date(2022, 11, 23, 0, 0, 0, 0, timeJst), SP: 1},
@@ -42,7 +44,8 @@ func TestMostEarlyDt(t *testing.T) {
 		{
 			name: "second is early date",
 			tasklist: TaskList{
-				[]Task{
+				Name: "TestMostEarlyDt",
+				List: []Task{
 					{CreateDt: time.Date(2022, 11, 21, 0, 0, 0, 0, timeJst), SP: 1},
 					{CreateDt: time.Date(2022, 11, 20, 0, 0, 0, 0, timeJst), SP: 1},
 					{CreateDt: time.Date(2022, 11, 22, 0, 0, 0, 0, timeJst), SP: 1},
@@ -54,7 +57,8 @@ func TestMostEarlyDt(t *testing.T) {
 		{
 			name: "return now",
 			tasklist: TaskList{
-				[]Task{},
+				Name: "TestMostEarlyDt",
+				List: []Task{},
 			},
 			now:     time.Date(2022, 11, 28, 0, 0, 0, 0, timeJst),
 			expects: time.Date(2022, 11, 28, 0, 0, 0, 0, timeJst),

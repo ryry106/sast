@@ -6,20 +6,21 @@ import (
 )
 
 type SPDailyList struct {
-	List []SPDaily
+	Name string    `json:"name"`
+	List []SPDaily `json:"list"`
 }
 type SPDaily struct {
-	Dt time.Time
-	SP int
+	Dt time.Time `json:"dt"`
+	SP int       `json:"sp"`
 }
 
-func NewSPDailyList(start time.Time, end time.Time) *SPDailyList {
+func NewSPDailyList(name string, start time.Time, end time.Time) *SPDailyList {
 	diffDays := diffDays(start, end)
 	spdailyList := make([]SPDaily, diffDays, diffDays)
 	for i := 0; i < diffDays; i++ {
 		spdailyList[i].Dt = start.AddDate(0, 0, i)
 	}
-	return &SPDailyList{spdailyList}
+	return &SPDailyList{Name: name, List: spdailyList}
 }
 
 func (sl *SPDailyList) ToJson() string {

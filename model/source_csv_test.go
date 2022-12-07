@@ -9,6 +9,7 @@ import (
 func TestToTaskList(t *testing.T) {
 	timeJst, _ = time.LoadLocation("Asia/Tokyo")
 	expects := &TaskList{
+		Name: "tests/source_csv.csv",
 		List: []Task{
 			{SP: 1, CreateDt: time.Date(2022, 11, 1, 0, 0, 0, 0, timeJst), FixedDt: time.Date(2022, 11, 10, 0, 0, 0, 0, timeJst)},
 			{SP: 2, CreateDt: time.Date(2022, 11, 1, 0, 0, 0, 0, timeJst)},
