@@ -4,14 +4,34 @@
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
   <script type="text/javascript">
     google.charts.load('current', {'packages': ['corechart']})
-//    google.charts.setOnLoadCallback(drawChart);
 
-    getResource = async() => {
-      return await (await fetch("http://localhost:8080/resource")).text()
+    drawChart = () => {
+      fetch("http://localhost:8080/resource")
+        .then(res => {
+          if (res.ok) {
+            return res.text()
+          } else {
+            return Promise.reject(new Error('/resource Error.'));
+          }
+        })
+        .then(body => {
+          source = filter(body)
+
+          var data = google.visualization.arrayToDataTable(source.sp_list);
+          var options = {
+            title: source.name,
+            legend: {position: 'bottom'},
+            vAxis: {maxValue: source.sp_max, minValue: 0},
+          };
+
+          var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+
+          chart.draw(data, options);
+        })
     }
 
-    filter = async () => {
-      res = JSON.parse(await getResource())
+    filter = (body) => {
+      res = JSON.parse(body)
       return {
         name: res.name,
         sp_max: Math.max(res.List.map(elm => elm.SP)),
@@ -21,24 +41,7 @@
       }
     }
 
-    drawChart = async () => {
-      source = await filter(await getResource())
-
-      var data = google.visualization.arrayToDataTable(source.sp_list);
-
-      var options = {
-        title: source.name,
-        legend: {position: 'bottom'},
-        vAxis: {maxValue: source.sp_max, minValue: 0},
-      };
-
-      var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
-
-      chart.draw(data, options);
-    }
-
-    // callbackでasyncメソッドを叩くようにしたいところ
-    drawChart()
+    google.charts.setOnLoadCallback(drawChart);
   </script>
 </head>
 
