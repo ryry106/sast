@@ -1,7 +1,7 @@
 package preview
 
 import (
-	"burndownchart/model"
+	"sgtast/model"
 	"io"
 	"net/http"
 	"os"

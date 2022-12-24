@@ -1,4 +1,4 @@
-module burndownchart
+module sgtast
 
 go 1.19
 

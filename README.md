@@ -1,4 +1,4 @@
-# burndownchart
+# sgtast
 ## feature
 - [x] : 対象のcsvからバーンダウンチャートを表示する
 - [ ] : csvのフォーマットについてヘルプを表示する
