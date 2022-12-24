@@ -17,6 +17,10 @@ type SPDaily struct {
 	SP int       `json:"sp"`
 }
 
+func NewSPDailyLists(sl []SPDailyList) *SPDailyLists {
+	return &SPDailyLists{Lists: sl}
+}
+
 func NewSPDailyList(name string, start time.Time, end time.Time) *SPDailyList {
 	diffDays := diffDays(start, end)
 	spdailyList := make([]SPDaily, diffDays, diffDays)

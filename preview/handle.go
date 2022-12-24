@@ -1,10 +1,10 @@
 package preview
 
 import (
+	"burndownchart/model"
 	"io"
 	"net/http"
 	"os"
-	"burndownchart/model"
 	"time"
 
 	"github.com/labstack/echo"
@@ -45,5 +45,7 @@ func (r *resourceHandler) handle(c echo.Context) error {
 		return c.String(http.StatusInternalServerError, err.Error())
 	}
 
-	return c.String(http.StatusOK, tl.ToSPDaily(time.Now().In(tz)).ToJson())
+	sl := *tl.ToSPDaily(time.Now().In(tz))
+	sls := model.NewSPDailyLists([]model.SPDailyList{sl})
+	return c.String(http.StatusOK, sls.ToJson())
 }
