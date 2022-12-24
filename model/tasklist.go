@@ -2,12 +2,17 @@ package model
 
 import (
 	"bufio"
+	"io/ioutil"
 	"os"
+	"path/filepath"
 	"strconv"
 	"strings"
 	"time"
 )
 
+type TasksList struct {
+	List []Tasks
+}
 type Tasks struct {
 	Name string
 	List []Task
@@ -100,4 +105,36 @@ func convertSP(lineUnit string) int {
 		return 0
 	}
 	return sp
+}
+
+func TasksListFromCSVDir(dirPath string) (*TasksList, error) {
+	csvList := dirwalk(dirPath)
+	var tasksList []Tasks
+	for _, csv := range csvList {
+		tasks, err := TasksFromCSV(csv)
+		if err != nil {
+			continue
+		}
+		tasksList = append(tasksList, *tasks)
+	}
+  // todo errorをまとめて返した方が良さそう
+	return &TasksList{tasksList}, nil
+}
+
+func dirwalk(dirPath string) []string {
+	files, err := ioutil.ReadDir(dirPath)
+	if err != nil {
+		panic(err)
+	}
+
+	var paths []string
+	for _, file := range files {
+		if file.IsDir() {
+			paths = append(paths, dirwalk(filepath.Join(dirPath, file.Name()))...)
+			continue
+		}
+		paths = append(paths, filepath.Join(dirPath, file.Name()))
+	}
+
+	return paths
 }

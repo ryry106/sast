@@ -89,3 +89,38 @@ func TestTasksFromCSV(t *testing.T) {
 	}
 }
 
+func TestTasksListFromCSVDir(t *testing.T) {
+	expects := &TasksList{
+		List: []Tasks{
+			{
+				Name: "tests/tgtdir/source1.csv",
+				List: []Task{
+					{SP: 3, CreateDt: time.Date(2022, 11, 3, 0, 0, 0, 0, timeJst), FixedDt: time.Date(2022, 11, 13, 0, 0, 0, 0, timeJst)},
+					{SP: 1, CreateDt: time.Date(2022, 11, 3, 0, 0, 0, 0, timeJst)},
+					{SP: 2, CreateDt: time.Date(2022, 11, 4, 0, 0, 0, 0, timeJst), FixedDt: time.Date(2022, 11, 11, 0, 0, 0, 0, timeJst)},
+				},
+			},
+			{
+				Name: "tests/tgtdir/source2.csv",
+				List: []Task{
+					{SP: 1, CreateDt: time.Date(2022, 11, 1, 0, 0, 0, 0, timeJst), FixedDt: time.Date(2022, 11, 10, 0, 0, 0, 0, timeJst)},
+					{SP: 2, CreateDt: time.Date(2022, 11, 1, 0, 0, 0, 0, timeJst)},
+					{SP: 3, CreateDt: time.Date(2022, 11, 4, 0, 0, 0, 0, timeJst), FixedDt: time.Date(2022, 11, 8, 0, 0, 0, 0, timeJst)},
+				},
+			},
+			{
+				Name: "tests/tgtdir/tmp/source3.csv",
+				List: []Task{
+					{SP: 5, CreateDt: time.Date(2022, 12, 1, 0, 0, 0, 0, timeJst), FixedDt: time.Date(2022, 12, 10, 0, 0, 0, 0, timeJst)},
+					{SP: 1, CreateDt: time.Date(2022, 12, 1, 0, 0, 0, 0, timeJst)},
+					{SP: 3, CreateDt: time.Date(2022, 12, 4, 0, 0, 0, 0, timeJst), FixedDt: time.Date(2022, 12, 8, 0, 0, 0, 0, timeJst)},
+				},
+			},
+		},
+	}
+
+	actual, _ := TasksListFromCSVDir("tests/tgtdir")
+	if !reflect.DeepEqual(actual, expects) {
+		t.Errorf("fail. \nexpects: %v\nactual:  %v", expects, actual)
+	}
+}
