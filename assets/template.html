@@ -4,10 +4,13 @@
   <style>
     .table {
       display: table;
+      table-layout: auto;
+      width: auto;
     }
 
     .charts {
-      border: 1px solid;
+      display: table-cell;
+      width: auto;
     }
   </style>
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
@@ -25,6 +28,11 @@
         })
         .then(body => {
           source = filter(body)
+          // todo 複数のリソースが帰ってきた場合に対応する
+          addChart(source)
+          addChart(source)
+          addChart(source)
+          addChart(source)
           addChart(source)
         })
     }
@@ -40,8 +48,19 @@
       const elm = document.createElement("div")
       elm.id = 'curve_chart_' + document.querySelectorAll("div[id^='curve_chart']").length
       elm.classList.add("charts")
-      document.querySelector(".table").insertAdjacentElement('afterbegin', elm)
+      getAndCreateInsertTable().insertAdjacentElement('beforeend', elm)
       new google.visualization.LineChart(elm).draw(data, options)
+    }
+
+    getAndCreateInsertTable = () => {
+      const tables = Array.from(document.querySelectorAll(".table")).filter(e => e.querySelectorAll(".charts").length < config.sideBySideLimit)
+      if (tables.length) {
+        return tables[0]
+      }
+      const res = document.createElement("div")
+      res.classList.add("table")
+      document.body.insertAdjacentElement('beforeend', res)
+      return res
     }
 
     filter = (body) => {
@@ -55,11 +74,13 @@
       }
     }
 
+    const config = {
+      sideBySideLimit: 3
+    }
+
     google.charts.setOnLoadCallback(drawChart);
   </script>
 </head>
-<div class="table"></div>
-
 <body>
 </body>
 
