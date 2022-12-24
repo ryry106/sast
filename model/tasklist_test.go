@@ -9,7 +9,7 @@ import (
 var timeJst, _ = time.LoadLocation("Asia/Tokyo")
 
 func TestToSPDaily(t *testing.T) {
-	tl := TaskList{
+	tl := Tasks{
 		Name: "TestToSPDaily",
 		List: []Task{
 			{CreateDt: time.Date(2022, 11, 21, 0, 0, 0, 0, timeJst), FixedDt: time.Date(2022, 11, 22, 0, 0, 0, 0, timeJst), SP: 1},
@@ -37,13 +37,13 @@ func TestToSPDaily(t *testing.T) {
 func TestMostEarlyDt(t *testing.T) {
 	tt := []struct {
 		name     string
-		tasklist TaskList
+		tasklist Tasks
 		now      time.Time
 		expects  time.Time
 	}{
 		{
 			name: "second is early date",
-			tasklist: TaskList{
+			tasklist: Tasks{
 				Name: "TestMostEarlyDt",
 				List: []Task{
 					{CreateDt: time.Date(2022, 11, 21, 0, 0, 0, 0, timeJst), SP: 1},
@@ -56,7 +56,7 @@ func TestMostEarlyDt(t *testing.T) {
 		},
 		{
 			name: "return now",
-			tasklist: TaskList{
+			tasklist: Tasks{
 				Name: "TestMostEarlyDt",
 				List: []Task{},
 			},
@@ -73,9 +73,9 @@ func TestMostEarlyDt(t *testing.T) {
 	}
 }
 
-func TestTaskListFromCSV(t *testing.T) {
+func TestTasksFromCSV(t *testing.T) {
 	timeJst, _ = time.LoadLocation("Asia/Tokyo")
-	expects := &TaskList{
+	expects := &Tasks{
 		Name: "tests/source_csv.csv",
 		List: []Task{
 			{SP: 1, CreateDt: time.Date(2022, 11, 1, 0, 0, 0, 0, timeJst), FixedDt: time.Date(2022, 11, 10, 0, 0, 0, 0, timeJst)},
@@ -83,7 +83,7 @@ func TestTaskListFromCSV(t *testing.T) {
 			{SP: 3, CreateDt: time.Date(2022, 11, 4, 0, 0, 0, 0, timeJst), FixedDt: time.Date(2022, 11, 8, 0, 0, 0, 0, timeJst)},
 		},
 	}
-	actual, _ := TaskListFromCSV("tests/source_csv.csv")
+	actual, _ := TasksFromCSV("tests/source_csv.csv")
 	if !reflect.DeepEqual(actual, expects) {
 		t.Errorf("fail. \nexpects: %v\nactual:  %v", expects, actual)
 	}

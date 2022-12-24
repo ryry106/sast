@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-type TaskList struct {
+type Tasks struct {
 	Name string
 	List []Task
 }
@@ -18,13 +18,13 @@ type Task struct {
 	FixedDt  time.Time
 }
 
-func (tl *TaskList) ToSPDaily(now time.Time) *SPDailyList {
+func (tl *Tasks) ToSPDaily(now time.Time) *SPDailyList {
 	mostEarlyDt := tl.mostEarlyDt(now)
 	spdailyList := NewSPDailyList(tl.Name, mostEarlyDt, now)
 	return tl.calculateSP(*spdailyList)
 }
 
-func (tl *TaskList) calculateSP(spdl SPDailyList) *SPDailyList {
+func (tl *Tasks) calculateSP(spdl SPDailyList) *SPDailyList {
 	for _, task := range tl.List {
 		for i, spd := range spdl.List {
 			if isAddSP(spd.Dt, task) {
@@ -35,7 +35,7 @@ func (tl *TaskList) calculateSP(spdl SPDailyList) *SPDailyList {
 	return &spdl
 }
 
-func (tl *TaskList) mostEarlyDt(now time.Time) time.Time {
+func (tl *Tasks) mostEarlyDt(now time.Time) time.Time {
 	var mostEarlyDt = now
 	for _, task := range tl.List {
 		if mostEarlyDt.After(task.CreateDt) {
@@ -57,7 +57,7 @@ func isAddSP(addTargetDt time.Time, task Task) bool {
 	return true
 }
 
-func TaskListFromCSV(path string) (*TaskList, error) {
+func TasksFromCSV(path string) (*Tasks, error) {
 	fp, err := os.Open(path)
 	if err != nil {
 		return nil, err
@@ -74,7 +74,7 @@ func TaskListFromCSV(path string) (*TaskList, error) {
 		list = append(list, Task{SP: sp, CreateDt: cd, FixedDt: fd})
 	}
 
-	return &TaskList{Name: path, List: list}, nil
+	return &Tasks{Name: path, List: list}, nil
 }
 
 func lineParse(line string) (int, time.Time, time.Time) {
