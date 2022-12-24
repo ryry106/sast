@@ -22,7 +22,7 @@ func TestToJson(t *testing.T) {
 			{Dt: time.Date(2022, 11, 26, 0, 0, 0, 0, timeJst), SP: 3},
 		},
 	}
-	expects := "{\"name\":\"TestToJson\",\"list\":[{\"dt\":\"2022-11-23T00:00:00+09:00\",\"sp\":1},{\"dt\":\"2022-11-25T00:00:00+09:00\",\"sp\":2},{\"dt\":\"2022-11-26T00:00:00+09:00\",\"sp\":3}]}"
+	expects := "[{\"name\":\"TestToJson\",\"list\":[{\"dt\":\"2022-11-23T00:00:00+09:00\",\"sp\":1},{\"dt\":\"2022-11-25T00:00:00+09:00\",\"sp\":2},{\"dt\":\"2022-11-26T00:00:00+09:00\",\"sp\":3}]}]"
 	actual := sl.ToJson()
 	if expects != actual {
 		t.Errorf("fail. %s, %s", expects, actual)

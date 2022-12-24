@@ -29,11 +29,11 @@
         .then(body => {
           source = filter(body)
           // todo 複数のリソースが帰ってきた場合に対応する
-          addChart(source)
-          addChart(source)
-          addChart(source)
-          addChart(source)
-          addChart(source)
+          addChart(source[0])
+          addChart(source[0])
+          addChart(source[0])
+          addChart(source[0])
+          addChart(source[0])
         })
     }
 
@@ -64,14 +64,15 @@
     }
 
     filter = (body) => {
-      res = JSON.parse(body)
-      return {
-        name: res.name,
-        sp_max: Math.max(res.list.map(elm => elm.sp)),
-        sp_list: [
-          ['day', 'param'],
-        ].concat(res.list.map(elm => ["", elm.sp]))
-      }
+      return JSON.parse(body).map(e => {
+        return {
+          name: e.name,
+          sp_max: Math.max(e.list.map(elm => elm.sp)),
+          sp_list: [
+            ['day', 'param'],
+          ].concat(e.list.map(elm => ["", elm.sp]))
+        }
+      })
     }
 
     const config = {
@@ -81,6 +82,7 @@
     google.charts.setOnLoadCallback(drawChart);
   </script>
 </head>
+
 <body>
 </body>
 

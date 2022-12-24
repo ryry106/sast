@@ -25,7 +25,7 @@ func NewSPDailyList(name string, start time.Time, end time.Time) *SPDailyList {
 
 func (sl *SPDailyList) ToJson() string {
 	j, _ := json.Marshal(sl)
-	return string(j)
+	return "[" + string(j) + "]"
 }
 
 func diffDays(start time.Time, end time.Time) int {
