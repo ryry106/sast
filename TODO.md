@@ -1,3 +1,4 @@
 - [x] : clean/model - modelがよくわからない。名前をリファクタリング
 - [ ] : template.htmlファイルをembedできるようにする(build対応
 - [ ] : テストの整理
+- [ ] : startの日付だけ設定できるように
