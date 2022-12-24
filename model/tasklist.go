@@ -107,8 +107,19 @@ func convertSP(lineUnit string) int {
 	return sp
 }
 
+func (tl *TasksList) ToSPDailyLists(now time.Time) *SPDailyLists {
+	var sl []SPDailyList
+	for _, t := range tl.List {
+		sl = append(sl, *t.ToSPDaily(now))
+	}
+	return NewSPDailyLists(sl)
+}
+
 func TasksListFromCSVDir(dirPath string) (*TasksList, error) {
-	csvList := dirwalk(dirPath)
+	csvList, err := dirwalk(dirPath)
+	if err != nil {
+		return &TasksList{}, err
+	}
 	var tasksList []Tasks
 	for _, csv := range csvList {
 		tasks, err := TasksFromCSV(csv)
@@ -117,24 +128,26 @@ func TasksListFromCSVDir(dirPath string) (*TasksList, error) {
 		}
 		tasksList = append(tasksList, *tasks)
 	}
-  // todo errorをまとめて返した方が良さそう
+	// todo errorをまとめて返した方が良さそう
 	return &TasksList{tasksList}, nil
 }
 
-func dirwalk(dirPath string) []string {
+func dirwalk(dirPath string) ([]string, error) {
 	files, err := ioutil.ReadDir(dirPath)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
 	var paths []string
 	for _, file := range files {
 		if file.IsDir() {
-			paths = append(paths, dirwalk(filepath.Join(dirPath, file.Name()))...)
+			res, _ := dirwalk(filepath.Join(dirPath, file.Name()))
+
+			paths = append(paths, res...)
 			continue
 		}
 		paths = append(paths, filepath.Join(dirPath, file.Name()))
 	}
 
-	return paths
+	return paths, nil
 }

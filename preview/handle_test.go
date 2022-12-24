@@ -30,7 +30,7 @@ func TestPreviewHandlerErrorNoTemplate(t *testing.T) {
 
 
 func TestResourceHandler(t *testing.T) {
-	ph := &resourceHandler{csvPath: "tests/sample.csv"}
+	ph := &resourceHandler{csvDir: "tests/sample"}
 	c := echo.New().NewContext(httptest.NewRequest("GET", "/stub", strings.NewReader("")), httptest.NewRecorder())
 	err := ph.handle(c)
 	if err != nil || http.StatusOK != c.Response().Status {
@@ -39,7 +39,7 @@ func TestResourceHandler(t *testing.T) {
 }
 
 func TestResourceHandlerErrorNoTemplate(t *testing.T) {
-	ph := &resourceHandler{csvPath: "dummy_template_path"}
+	ph := &resourceHandler{csvDir: "dummypath"}
 	rec := httptest.NewRecorder()
 	c := echo.New().NewContext(httptest.NewRequest("GET", "/stub", strings.NewReader("")), rec)
 	err := ph.handle(c)

@@ -1,7 +1,8 @@
 # misc/sample.csv を利用してプレビューを実施
-FILE := misc/sample.csv
+FILE := misc/sample
+SAMPLEDIR := misc/sample
 preview_sample:
-	go run . preview $(FILE)
+	go run . preview $(SAMPLEDIR)
 
 # 直近の日付に合わせてsample.csvファイルを更新する
 update_sample:

@@ -8,7 +8,7 @@ import (
 )
 
 type Serv struct {
-	CsvPath string
+	CsvDir string
 }
 
 func (s *Serv) Up() {
@@ -20,7 +20,7 @@ func (s *Serv) Up() {
 	e.Use(middleware.Recover())
 
 	ph := &prevHandler{templateHtmlPath: "assets/template.html"}
-	rh := &resourceHandler{csvPath: s.CsvPath}
+	rh := &resourceHandler{csvDir: s.CsvDir}
 
 	// Routes
 	e.GET("/preview", ph.handle)

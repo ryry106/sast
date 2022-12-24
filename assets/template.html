@@ -26,15 +26,8 @@
             return Promise.reject(new Error('/resource Error.'));
           }
         })
-        .then(body => {
-          source = filter(body)
-          // todo 複数のリソースが帰ってきた場合に対応する
-          addChart(source[0])
-          addChart(source[0])
-          addChart(source[0])
-          addChart(source[0])
-          addChart(source[0])
-        })
+        .then(body => filter(body).forEach(e => addChart(e))
+        )
     }
 
     addChart = (source) => {

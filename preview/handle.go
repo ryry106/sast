@@ -1,10 +1,10 @@
 package preview
 
 import (
-	"sgtast/model"
 	"io"
 	"net/http"
 	"os"
+	"sgtast/model"
 	"time"
 
 	"github.com/labstack/echo"
@@ -31,11 +31,11 @@ func (ph *prevHandler) handle(c echo.Context) error {
 }
 
 type resourceHandler struct {
-	csvPath string
+	csvDir string
 }
 
 func (r *resourceHandler) handle(c echo.Context) error {
-	tl, err := model.TasksFromCSV(r.csvPath)
+	tl, err := model.TasksListFromCSVDir(r.csvDir)
 	if err != nil {
 		return c.String(http.StatusInternalServerError, err.Error())
 	}
@@ -45,7 +45,6 @@ func (r *resourceHandler) handle(c echo.Context) error {
 		return c.String(http.StatusInternalServerError, err.Error())
 	}
 
-	sl := *tl.ToSPDaily(time.Now().In(tz))
-	sls := model.NewSPDailyLists([]model.SPDailyList{sl})
+	sls := *tl.ToSPDailyLists(time.Now().In(tz))
 	return c.String(http.StatusOK, sls.ToJson())
 }

@@ -1,2 +1,3 @@
 - [x] : clean/model - modelがよくわからない。名前をリファクタリング
-- [ ] : template.htmlファイルをembedできるようにする
+- [ ] : template.htmlファイルをembedできるようにする(build対応
+- [ ] : テストの整理
