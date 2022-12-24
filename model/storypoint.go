@@ -32,7 +32,10 @@ func (sl *SPDailyList) ToJson() string {
 }
 
 func (sls *SPDailyLists) ToJson() string {
-	j, _ := json.Marshal(sls.Lists)
+	j, err := json.Marshal(sls.Lists)
+	if err != nil || string(j) == "null" {
+		return "[]"
+	}
 	return string(j)
 }
 
