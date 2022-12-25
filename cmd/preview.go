@@ -6,7 +6,7 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
-	"sgtast/preview"
+	"sast/preview"
 )
 
 // previewCmd represents the preview command

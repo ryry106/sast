@@ -4,7 +4,7 @@ import (
 	"io"
 	"net/http"
 	"os"
-	"sgtast/model"
+	"sast/model"
 	"time"
 
 	"github.com/labstack/echo"

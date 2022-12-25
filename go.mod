@@ -1,4 +1,4 @@
-module sgtast
+module sast
 
 go 1.19
 
