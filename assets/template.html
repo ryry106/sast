@@ -17,62 +17,110 @@
   <script type="text/javascript">
     google.charts.load('current', {'packages': ['corechart']})
 
-    drawChart = () => {
-      fetch("http://localhost:8080/resource")
-        .then(res => {
-          if (res.ok) {
-            return res.text()
-          } else {
-            return Promise.reject(new Error('/resource Error.'));
+    class Charts {
+      #config = {
+        intervalSec: 1,
+        sideBySideLimit: 3,
+      }
+      #charts = {}
+      #resource
+
+      constructor() { }
+
+      draw = () => {
+        fetch("http://localhost:8080/resource")
+          .then(res => {
+            if (res.ok) {
+              return res.text()
+            } else {
+              return Promise.reject(new Error('/resource Error.'));
+            }
+          })
+          .then(body => {
+            if (this._updateResource(body)) {
+              this._parseResource().forEach(parsedObj => {
+                const [id, data, options] = this._convert(parsedObj)
+                if (this._isChartsExists(id)) {
+                  this._update(id, data, options)
+                } else {
+                  this._add(id, data, options)
+                }
+              })
+            }
+          })
+      }
+
+      pulsarDraw = () => {
+        setInterval(async () => {
+          this.draw()
+        }, this.#config.intervalSec * 1000)
+      }
+
+      _parseResource = () => {
+        return JSON.parse(this.#resource).map(e => {
+          return {
+            name: e.name,
+            sp_max: Math.max(e.list.map(elm => elm.sp)),
+            sp_list: [
+              ['day', 'param'],
+            ].concat(e.list.map(elm => ["", elm.sp]))
           }
         })
-        .then(body => filter(body).forEach(e => addChart(e))
-        )
-    }
-
-    addChart = (source) => {
-      var data = google.visualization.arrayToDataTable(source.sp_list);
-      var options = {
-        title: source.name,
-        legend: {position: 'bottom'},
-        vAxis: {maxValue: source.sp_max, minValue: 0},
-      };
-
-      const elm = document.createElement("div")
-      elm.id = 'curve_chart_' + document.querySelectorAll("div[id^='curve_chart']").length
-      elm.classList.add("charts")
-      getAndCreateInsertTable().insertAdjacentElement('beforeend', elm)
-      new google.visualization.LineChart(elm).draw(data, options)
-    }
-
-    getAndCreateInsertTable = () => {
-      const tables = Array.from(document.querySelectorAll(".table")).filter(e => e.querySelectorAll(".charts").length < config.sideBySideLimit)
-      if (tables.length) {
-        return tables[0]
       }
-      const res = document.createElement("div")
-      res.classList.add("table")
-      document.body.insertAdjacentElement('beforeend', res)
-      return res
-    }
 
-    filter = (body) => {
-      return JSON.parse(body).map(e => {
-        return {
-          name: e.name,
-          sp_max: Math.max(e.list.map(elm => elm.sp)),
-          sp_list: [
-            ['day', 'param'],
-          ].concat(e.list.map(elm => ["", elm.sp]))
+      _updateResource = (current) => {
+        if (this.#resource === current) {
+          return false
         }
-      })
+        this.#resource = current
+        return true
+      }
+
+      _convert = (parsedObj) => {
+        var data = google.visualization.arrayToDataTable(parsedObj.sp_list);
+        var options = {
+          title: parsedObj.name,
+          legend: {position: 'bottom'},
+          vAxis: {maxValue: parsedObj.sp_max, minValue: 0},
+        };
+        return [parsedObj.name, data, options]
+      }
+
+      _isChartsExists = (id) => {
+        return this.#charts[id]
+      }
+
+      _update = (id, data, options) => {
+        this.#charts[id].draw(data, options)
+      }
+
+      _add = (id, data, options) => {
+        const elm = document.createElement("div")
+        elm.id = id
+        elm.classList.add("charts")
+        this._getAndCreateInsertTable().insertAdjacentElement('beforeend', elm)
+        this.#charts[id] = new google.visualization.LineChart(elm)
+        this.#charts[id].draw(data, options)
+      }
+
+      _getAndCreateInsertTable = () => {
+        const tables = Array.from(document.querySelectorAll(".table")).filter(e => e.querySelectorAll(".charts").length < this.#config.sideBySideLimit)
+        if (tables.length) {
+          return tables[0]
+        }
+        const res = document.createElement("div")
+        res.classList.add("table")
+        document.body.insertAdjacentElement('beforeend', res)
+        return res
+      }
+
     }
 
-    const config = {
-      sideBySideLimit: 3
-    }
-
-    google.charts.setOnLoadCallback(drawChart);
+    google.charts.setOnLoadCallback(() => {
+      const charts = new Charts()
+      charts.draw()
+      charts.pulsarDraw()
+    });
   </script>
 </head>
 
