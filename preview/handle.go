@@ -32,7 +32,7 @@ type resourceHandler struct {
 }
 
 func (r *resourceHandler) handle(c echo.Context) error {
-	tl, err := model.TasksListFromCSVDir(r.csvDir)
+	tl, err := model.NewTasksListFromCSVDir(r.csvDir)
 	if err != nil {
 		return c.String(http.StatusInternalServerError, err.Error())
 	}

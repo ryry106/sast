@@ -13,17 +13,51 @@ import (
 type TasksList struct {
 	List []Tasks
 }
+
 type Tasks struct {
 	Name string
 	List []Task
 }
+
 type Task struct {
 	SP       int
 	CreateDt time.Time
 	FixedDt  time.Time
 }
 
-func (tl *Tasks) ToSPDaily(now time.Time) *SPDailyList {
+func NewTasksListFromCSVDir(dirPath string) (*TasksList, error) {
+	csvList, err := dirwalk(dirPath)
+	if err != nil {
+		return &TasksList{}, err
+	}
+
+	fileNum := len(csvList)
+	rcvCh := make(chan resultParsedCSV, fileNum)
+	defer close(rcvCh)
+	for _, csv := range csvList {
+		go func(rcvCh chan<- resultParsedCSV, csv string) {
+			rcvCh <- parseCSV(csv)
+		}(rcvCh, csv)
+	}
+
+	var tasksList []Tasks
+	for i := 0; i < fileNum; i++ {
+		cpr := <-rcvCh
+		tasksList = append(tasksList, *cpr.t)
+	}
+
+	return &TasksList{sortTasksList(tasksList, csvList)}, nil
+}
+
+func (tl *TasksList) ToSPDailyLists(now time.Time) *SPDailyLists {
+	var sl []SPDailyList
+	for _, t := range tl.List {
+		sl = append(sl, *t.toSPDailyList(now))
+	}
+	return NewSPDailyLists(sl)
+}
+
+func (tl *Tasks) toSPDailyList(now time.Time) *SPDailyList {
 	mostEarlyDt := tl.mostEarlyDt(now)
 	spdailyList := NewSPDailyList(tl.Name, mostEarlyDt, now)
 	return tl.calculateSP(*spdailyList)
@@ -62,74 +96,96 @@ func isAddSP(addTargetDt time.Time, task Task) bool {
 	return true
 }
 
-func TasksFromCSV(path string) (*Tasks, error) {
+type resultParsedCSV struct {
+	t *Tasks
+	e []errorParsedCSV
+}
+
+type errorParsedCSV struct {
+	csv string
+	row string
+	err error
+}
+
+func parseCSV(path string) resultParsedCSV {
 	fp, err := os.Open(path)
 	if err != nil {
-		return nil, err
+		return resultParsedCSV{e: []errorParsedCSV{{csv: path, err: err}}}
 	}
 	defer fp.Close()
 
 	list := []Task{}
+	errors := []errorParsedCSV{}
 	s := bufio.NewScanner(fp)
 	for s.Scan() {
-		sp, cd, fd := lineParse(s.Text())
-		if cd.IsZero() {
+		row := s.Text()
+		sp, cd, fd, err := parseCSVRow(row)
+		if err != nil {
+			errors = append(errors, errorParsedCSV{csv: path, row: row, err: err})
 			continue
 		}
 		list = append(list, Task{SP: sp, CreateDt: cd, FixedDt: fd})
 	}
 
-	return &Tasks{Name: path, List: list}, nil
+	return resultParsedCSV{t: &Tasks{Name: path, List: list}, e: errors}
 }
 
-func lineParse(line string) (int, time.Time, time.Time) {
+func parseCSVRow(line string) (int, time.Time, time.Time, error) {
 	la := strings.Split(line, ",")
-	sp := convertSP(la[0])
-	createDt := convertDt(la[1])
-	fixedDt := convertDt(la[2])
-	return sp, createDt, fixedDt
+	sp, err := convertSP(la[0])
+	if err != nil {
+		return 0, time.Time{}, time.Time{}, err
+	}
+	createDt, err := convertCreateDt(la[1])
+	if err != nil {
+		return 0, time.Time{}, time.Time{}, err
+	}
+	fixedDt, err := convertFixedDt(la[2])
+	if err != nil {
+		return 0, time.Time{}, time.Time{}, err
+	}
+	return sp, createDt, fixedDt, nil
 }
 
-func convertDt(lineUnit string) time.Time {
+func convertSP(lineUnit string) (int, error) {
+	sp, err := strconv.Atoi(lineUnit)
+	if err != nil {
+		return 0, err
+	}
+	return sp, nil
+}
+
+func convertCreateDt(str string) (time.Time, error) {
+	return convertDt(str)
+}
+
+func convertFixedDt(str string) (time.Time, error) {
+	if str == "" {
+		return time.Time{}, nil
+	}
+	return convertDt(str)
+}
+
+func convertDt(lineUnit string) (time.Time, error) {
 	timeJst, _ := time.LoadLocation("Asia/Tokyo")
 	dt, err := time.ParseInLocation("2006-01-02", lineUnit, timeJst)
 	if err != nil {
-		return time.Time{}
+		return time.Time{}, err
 	}
-	return dt
+	return dt, nil
 }
 
-func convertSP(lineUnit string) int {
-	sp, err := strconv.Atoi(lineUnit)
-	if err != nil {
-		return 0
-	}
-	return sp
-}
-
-func (tl *TasksList) ToSPDailyLists(now time.Time) *SPDailyLists {
-	var sl []SPDailyList
-	for _, t := range tl.List {
-		sl = append(sl, *t.ToSPDaily(now))
-	}
-	return NewSPDailyLists(sl)
-}
-
-func TasksListFromCSVDir(dirPath string) (*TasksList, error) {
-	csvList, err := dirwalk(dirPath)
-	if err != nil {
-		return &TasksList{}, err
-	}
-	var tasksList []Tasks
+func sortTasksList(tasksList []Tasks, csvList []string) []Tasks {
+	var res []Tasks
 	for _, csv := range csvList {
-		tasks, err := TasksFromCSV(csv)
-		if err != nil {
-			continue
+		for _, tasks := range tasksList {
+			if csv == tasks.Name {
+				res = append(res, tasks)
+				break
+			}
 		}
-		tasksList = append(tasksList, *tasks)
 	}
-	// todo errorをまとめて返した方が良さそう
-	return &TasksList{tasksList}, nil
+	return res
 }
 
 func dirwalk(dirPath string) ([]string, error) {

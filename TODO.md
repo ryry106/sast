@@ -1,7 +1,10 @@
 - [x] : clean/model - modelがよくわからない。名前をリファクタリング
-- [ ] : template.htmlファイルをembedできるようにする(build対応
-- [ ] : テストの整理
+- [x] : csv取得処理の並列化
+- [x] : tasklistファイルを整理
+- [x] : template.htmlファイルをembedできるようにする(build対応
 - [ ] : startの日付だけ設定できるように
-- [ ] : lint機能。TasksFromCSVの戻り値のエラーリストに詰めたら良いかな
+- [ ] : lint機能
 - [ ] : タスク作成機能
-- [ ] : csv取得処理の並列化
+- [ ] : jsonをハッシュにしてそれをgetパラメータにつけて、同じ物がきた場合はキャッシュで返すように
+- [ ] : storypointbydayly
+- [ ] : -p portをつける
