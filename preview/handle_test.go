@@ -10,7 +10,7 @@ import (
 )
 
 func TestPreviewHandler(t *testing.T) {
-	ph := &prevHandler{templateHtmlPath: "../assets/template.html"}
+	ph := &prevHandler{templateHtmlPath: "assets/template.html"}
 	c := echo.New().NewContext(httptest.NewRequest("GET", "/stub", strings.NewReader("")), httptest.NewRecorder())
 	err := ph.handle(c)
 	if err != nil || http.StatusOK != c.Response().Status {

@@ -1,26 +1,23 @@
 package preview
 
 import (
-	"io"
+	"embed"
 	"net/http"
-	"os"
 	"sast/model"
 	"time"
 
 	"github.com/labstack/echo"
 )
 
+//go:embed assets/*
+var assets embed.FS
+
 type prevHandler struct {
 	templateHtmlPath string
 }
 
 func (ph *prevHandler) handle(c echo.Context) error {
-	f, err := os.Open(ph.templateHtmlPath)
-	if err != nil {
-		return c.String(http.StatusInternalServerError, err.Error())
-	}
-
-	template, err := io.ReadAll(f)
+	template, err := assets.ReadFile(ph.templateHtmlPath)
 	if err != nil {
 		return c.String(http.StatusInternalServerError, err.Error())
 	}
