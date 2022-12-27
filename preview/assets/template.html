@@ -21,6 +21,7 @@
       #config = {
         intervalSec: 1,
         sideBySideLimit: 3,
+        resourcePort: "{{ .Port }}",
       }
       #charts = {}
       #resource
@@ -28,7 +29,7 @@
       constructor() { }
 
       draw = () => {
-        fetch("http://localhost:8080/resource")
+        fetch("http://localhost:" + this.#config.resourcePort + "/resource")
           .then(res => {
             if (res.ok) {
               return res.text()

@@ -9,6 +9,7 @@ import (
 
 type Serv struct {
 	CsvDir string
+	Port   string
 }
 
 func (s *Serv) Up() {
@@ -19,7 +20,7 @@ func (s *Serv) Up() {
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
 
-	ph := &prevHandler{templateHtmlPath: "assets/template.html"}
+  ph := &prevHandler{templateHtmlPath: "assets/template.html", port: s.Port}
 	rh := &resourceHandler{csvDir: s.CsvDir}
 
 	// Routes
@@ -29,7 +30,7 @@ func (s *Serv) Up() {
 	dispPreviewPath()
 
 	// Start server
-	e.Logger.Fatal(e.Start(":8080"))
+	e.Logger.Fatal(e.Start(":" + s.Port))
 }
 
 func dispPreviewPath() {

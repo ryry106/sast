@@ -10,7 +10,7 @@ import (
 )
 
 func TestPreviewHandler(t *testing.T) {
-	ph := &prevHandler{templateHtmlPath: "assets/template.html"}
+  ph := &prevHandler{templateHtmlPath: "assets/template.html", port: "8080"}
 	c := echo.New().NewContext(httptest.NewRequest("GET", "/stub", strings.NewReader("")), httptest.NewRecorder())
 	err := ph.handle(c)
 	if err != nil || http.StatusOK != c.Response().Status {
@@ -19,7 +19,7 @@ func TestPreviewHandler(t *testing.T) {
 }
 
 func TestPreviewHandlerErrorNoTemplate(t *testing.T) {
-	ph := &prevHandler{templateHtmlPath: "dummy_template_path"}
+	ph := &prevHandler{templateHtmlPath: "dummy_template_path", port: "8080"}
 	rec := httptest.NewRecorder()
 	c := echo.New().NewContext(httptest.NewRequest("GET", "/stub", strings.NewReader("")), rec)
 	err := ph.handle(c)

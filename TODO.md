@@ -2,9 +2,9 @@
 - [x] : csv取得処理の並列化
 - [x] : tasklistファイルを整理
 - [x] : template.htmlファイルをembedできるようにする(build対応
+- [x] : doing -p portをつける
 - [ ] : startの日付だけ設定できるように
 - [ ] : lint機能
 - [ ] : タスク作成機能
 - [ ] : jsonをハッシュにしてそれをgetパラメータにつけて、同じ物がきた場合はキャッシュで返すように
 - [ ] : storypointbydayly
-- [ ] : -p portをつける

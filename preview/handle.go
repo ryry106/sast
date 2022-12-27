@@ -1,7 +1,9 @@
 package preview
 
 import (
+	"bytes"
 	"embed"
+	"html/template"
 	"net/http"
 	"sast/model"
 	"time"
@@ -14,17 +16,38 @@ var assets embed.FS
 
 type prevHandler struct {
 	templateHtmlPath string
+	port             string
 }
 
 func (ph *prevHandler) handle(c echo.Context) error {
-	template, err := assets.ReadFile(ph.templateHtmlPath)
+	blob, err := ph.concretePreview()
 	if err != nil {
 		return c.String(http.StatusInternalServerError, err.Error())
 	}
+	return c.HTMLBlob(http.StatusOK, blob)
+}
 
-	c.Response().Header().Set(echo.HeaderContentType, "text/html; charset=UTF-8")
+func (ph *prevHandler) concretePreview() ([]byte, error) {
+	tb, err := assets.ReadFile(ph.templateHtmlPath)
+	if err != nil {
+		return nil, err
+	}
+	tpl, err := template.New("preview").Parse(string(tb))
+	if err != nil {
+		return nil, err
+	}
 
-	return c.String(http.StatusOK, string(template))
+	v := struct {
+		Port string
+	}{
+		Port: ph.port,
+	}
+
+	var res bytes.Buffer
+	if err := tpl.Execute(&res, v); err != nil {
+		return nil, err
+	}
+	return res.Bytes(), nil
 }
 
 type resourceHandler struct {
