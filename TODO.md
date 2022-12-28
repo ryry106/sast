@@ -3,6 +3,9 @@
 - [x] : tasklistファイルを整理
 - [x] : template.htmlファイルをembedできるようにする(build対応
 - [x] : doing -p portをつける
+- [ ] : template
+- [ ] : config
+- [ ] : help
 - [ ] : startの日付だけ設定できるように
 - [ ] : lint機能
 - [ ] : タスク作成機能
