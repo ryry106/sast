@@ -5,7 +5,9 @@ import (
 	"embed"
 	"html/template"
 	"net/http"
+	"os"
 	"sast/model"
+	"strconv"
 	"time"
 
 	"github.com/labstack/echo"
@@ -15,8 +17,17 @@ import (
 var assets embed.FS
 
 type prevHandler struct {
-	templateHtmlPath string
-	port             string
+	templatePath string
+	port         string
+}
+
+func newPrevHandler(templateName string, port int) (*prevHandler, error) {
+	templatePath := "assets/" + templateName + ".html"
+	_, err := assets.ReadFile(templatePath)
+	if err != nil {
+		return nil, err
+	}
+	return &prevHandler{templatePath: templatePath, port: strconv.Itoa(port)}, nil
 }
 
 func (ph *prevHandler) handle(c echo.Context) error {
@@ -28,7 +39,7 @@ func (ph *prevHandler) handle(c echo.Context) error {
 }
 
 func (ph *prevHandler) concretePreview() ([]byte, error) {
-	tb, err := assets.ReadFile(ph.templateHtmlPath)
+	tb, err := assets.ReadFile(ph.templatePath)
 	if err != nil {
 		return nil, err
 	}
@@ -52,6 +63,14 @@ func (ph *prevHandler) concretePreview() ([]byte, error) {
 
 type resourceHandler struct {
 	csvDir string
+}
+
+func newResourceHandler(csvDir string) (*resourceHandler, error) {
+	_, err := os.Stat(csvDir)
+	if os.IsNotExist(err) {
+		return nil, err
+	}
+	return &resourceHandler{csvDir: csvDir}, nil
 }
 
 func (r *resourceHandler) handle(c echo.Context) error {
