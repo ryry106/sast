@@ -5,8 +5,9 @@
 - [x] : doing -p portをつける
 - [x] : template
 - [x] : help
-- [ ] : startの日付だけ設定できるように
+- [x] : startの日付だけ設定できるように
 - [ ] : lint機能
+- [ ] : リファクタ
 - [ ] : タスク作成機能
 - [ ] : jsonをハッシュにしてそれをgetパラメータにつけて、同じ物がきた場合はキャッシュで返すように
 - [ ] : storypointbydayly
