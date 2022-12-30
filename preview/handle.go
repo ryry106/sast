@@ -62,15 +62,16 @@ func (ph *prevHandler) concretePreview() ([]byte, error) {
 }
 
 type resourceHandler struct {
-	csvDir string
+	csvDir  string
+	startDt string
 }
 
-func newResourceHandler(csvDir string) (*resourceHandler, error) {
+func newResourceHandler(csvDir string, startDt string) (*resourceHandler, error) {
 	_, err := os.Stat(csvDir)
 	if os.IsNotExist(err) {
 		return nil, err
 	}
-	return &resourceHandler{csvDir: csvDir}, nil
+	return &resourceHandler{csvDir: csvDir, startDt: startDt}, nil
 }
 
 func (r *resourceHandler) handle(c echo.Context) error {
@@ -84,6 +85,14 @@ func (r *resourceHandler) handle(c echo.Context) error {
 		return c.String(http.StatusInternalServerError, err.Error())
 	}
 
-	sls := *tl.ToSPDailyLists(time.Now().In(tz))
+	end := time.Now().In(tz)
+
+	start, err := time.ParseInLocation("2006-01-02", r.startDt, tz)
+	if err != nil {
+		sls := *tl.ToSPDailyListsEntirePeriod(end)
+		return c.String(http.StatusOK, sls.ToJson())
+	}
+
+	sls := *tl.ToSPDailyLists(start, end)
 	return c.String(http.StatusOK, sls.ToJson())
 }

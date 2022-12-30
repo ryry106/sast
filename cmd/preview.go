@@ -16,7 +16,8 @@ var previewCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		port, _ := cmd.Flags().GetInt("port")
 		templateName, _ := cmd.Flags().GetString("template-name")
-		serv := &preview.Serv{CsvDir: args[0], Port: port, TemplateName: templateName}
+		startDate, _ := cmd.Flags().GetString("start-date")
+		serv := &preview.Serv{CsvDir: args[0], Port: port, TemplateName: templateName, StartDate: startDate}
 		serv.Up()
 	},
 }
@@ -34,4 +35,5 @@ func init() {
 	// is called directly, e.g.:
 	previewCmd.Flags().IntP("port", "p", 8080, "preview server port.")
 	previewCmd.Flags().StringP("template-name", "t", "plane", "html template select.")
+	previewCmd.Flags().StringP("start-date", "s", "", "burndownchart start date. format 2006-01-02. automatic start date in case of parse error.")
 }

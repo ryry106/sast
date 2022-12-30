@@ -12,6 +12,7 @@ type Serv struct {
 	CsvDir       string
 	Port         int
 	TemplateName string
+	StartDate    string
 }
 
 func (s *Serv) Up() {
@@ -44,7 +45,7 @@ func (s *Serv) createHandler() (*prevHandler, *resourceHandler, error) {
 		return nil, nil, err
 	}
 
-	rh, err := newResourceHandler(s.CsvDir)
+	rh, err := newResourceHandler(s.CsvDir, s.StartDate)
 	if err != nil {
 		return nil, nil, err
 	}

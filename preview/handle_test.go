@@ -29,7 +29,7 @@ func TestPreviewHandlerErrorNoTemplate(t *testing.T) {
 }
 
 func TestResourceHandler(t *testing.T) {
-	ph, err := newResourceHandler("tests/sample")
+	ph, err := newResourceHandler("tests/sample", "2022-12-29")
 	if err != nil {
 		t.Error(err)
 	}
@@ -41,7 +41,7 @@ func TestResourceHandler(t *testing.T) {
 }
 
 func TestResourceHandlerErrorNoTemplate(t *testing.T) {
-	_, err := newResourceHandler("dummypath")
+	_, err := newResourceHandler("dummypath", "2022-12-30")
 	if err == nil {
 		t.Error("not exists csv dir. but create resourceHandler.")
 	}

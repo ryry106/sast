@@ -49,18 +49,28 @@ func NewTasksListFromCSVDir(dirPath string) (*TasksList, error) {
 	return &TasksList{sortTasksList(tasksList, csvList)}, nil
 }
 
-func (tl *TasksList) ToSPDailyLists(now time.Time) *SPDailyLists {
+func (tl *TasksList) ToSPDailyLists(start time.Time, end time.Time) *SPDailyLists {
 	var sl []SPDailyList
 	for _, t := range tl.List {
-		sl = append(sl, *t.toSPDailyList(now))
+		sl = append(sl, *t.toSPDailyList(start, end))
 	}
 	return NewSPDailyLists(sl)
 }
 
-func (tl *Tasks) toSPDailyList(now time.Time) *SPDailyList {
-	mostEarlyDt := tl.mostEarlyDt(now)
-	spdailyList := NewSPDailyList(tl.Name, mostEarlyDt, now)
-	return tl.calculateSP(*spdailyList)
+func (tl *TasksList) ToSPDailyListsEntirePeriod(now time.Time) *SPDailyLists {
+	var sl []SPDailyList
+	for _, t := range tl.List {
+		sl = append(sl, *t.toSPDailyListEntirePeriod(now))
+	}
+	return NewSPDailyLists(sl)
+}
+
+func (tl *Tasks) toSPDailyListEntirePeriod(end time.Time) *SPDailyList {
+	return tl.toSPDailyList(tl.mostEarlyDt(end), end)
+}
+
+func (tl *Tasks) toSPDailyList(start time.Time, end time.Time) *SPDailyList {
+	return tl.calculateSP(*NewSPDailyList(tl.Name, start, end))
 }
 
 func (tl *Tasks) calculateSP(spdl SPDailyList) *SPDailyList {
