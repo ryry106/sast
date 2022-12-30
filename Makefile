@@ -4,6 +4,9 @@ SAMPLEDIR := misc/sample
 preview_sample:
 	go run . preview $(SAMPLEDIR)
 
+preview_help:
+	go run . help preview
+
 # 直近の日付に合わせてmis/samplecちょっかのファイルを更新する
 update_sample:
 	echo "1,$(shell date -v-5d '+%Y-%m-%d'),$(shell date -v-4d '+%Y-%m-%d')" > $(SAMPLEDIR)/1.csv

@@ -4,7 +4,7 @@
 - [x] : template.htmlファイルをembedできるようにする(build対応
 - [x] : doing -p portをつける
 - [x] : template
-- [ ] : help
+- [x] : help
 - [ ] : startの日付だけ設定できるように
 - [ ] : lint機能
 - [ ] : タスク作成機能
