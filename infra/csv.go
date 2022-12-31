@@ -79,7 +79,7 @@ func parseCSV(path string) resultParsedCSV {
 	}
 	defer fp.Close()
 
-	list := []model.Task{}
+	list := []*model.Task{}
 	errors := []parseError{}
 	s := bufio.NewScanner(fp)
 	for s.Scan() {
@@ -89,7 +89,7 @@ func parseCSV(path string) resultParsedCSV {
 			errors = append(errors, parseError{csv: path, row: row, err: err})
 			continue
 		}
-		list = append(list, model.Task{SP: sp, CreateDt: cd, FixedDt: fd})
+		list = append(list, &model.Task{SP: sp, CreateDt: cd, FixedDt: fd})
 	}
 
 	return resultParsedCSV{t: model.NewTasks(path, list), e: errors}

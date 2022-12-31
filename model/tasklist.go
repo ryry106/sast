@@ -11,7 +11,7 @@ type TasksList struct {
 
 type Tasks struct {
 	name string
-	list []Task
+	list []*Task
 }
 
 type Task struct {
@@ -20,7 +20,7 @@ type Task struct {
 	FixedDt  time.Time
 }
 
-func NewTasks(name string, list []Task) *Tasks {
+func NewTasks(name string, list []*Task) *Tasks {
 	return &Tasks{name: name, list: list}
 }
 
@@ -99,7 +99,7 @@ func (tl *Tasks) mostEarlyDt(now time.Time) time.Time {
 	return mostEarlyDt
 }
 
-func isAddSP(addTargetDt time.Time, task Task) bool {
+func isAddSP(addTargetDt time.Time, task *Task) bool {
 	// タスク生成日がSP加算日付よりも後に生成された
 	if task.CreateDt.After(addTargetDt) {
 		return false
