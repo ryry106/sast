@@ -36,11 +36,11 @@ func TestToSPDailyList(t *testing.T) {
 	tl := Tasks{
 		name: "ToSPDailyList",
 		list: []*Task{
-			{CreateDt: time.Date(2022, 11, 21, 0, 0, 0, 0, timeJst), FixedDt: time.Date(2022, 11, 22, 0, 0, 0, 0, timeJst), SP: 1},
-			{CreateDt: time.Date(2022, 11, 22, 0, 0, 0, 0, timeJst), FixedDt: time.Date(2022, 11, 23, 0, 0, 0, 0, timeJst), SP: 1},
-			{CreateDt: time.Date(2022, 11, 23, 0, 0, 0, 0, timeJst), SP: 1},
-			{CreateDt: time.Date(2022, 11, 24, 0, 0, 0, 0, timeJst), SP: 1},
-			{CreateDt: time.Date(2022, 11, 25, 0, 0, 0, 0, timeJst), SP: 1},
+			{createDt: time.Date(2022, 11, 21, 0, 0, 0, 0, timeJst), fixedDt: time.Date(2022, 11, 22, 0, 0, 0, 0, timeJst), sp: 1},
+			{createDt: time.Date(2022, 11, 22, 0, 0, 0, 0, timeJst), fixedDt: time.Date(2022, 11, 23, 0, 0, 0, 0, timeJst), sp: 1},
+			{createDt: time.Date(2022, 11, 23, 0, 0, 0, 0, timeJst), sp: 1},
+			{createDt: time.Date(2022, 11, 24, 0, 0, 0, 0, timeJst), sp: 1},
+			{createDt: time.Date(2022, 11, 25, 0, 0, 0, 0, timeJst), sp: 1},
 		},
 	}
 	tests := []struct {
@@ -118,9 +118,9 @@ func TestToSPDailyListEntirePeriod(t *testing.T) {
 	tl := Tasks{
 		name: "ToSPDailyListEntirePeriod",
 		list: []*Task{
-			{CreateDt: time.Date(2022, 11, 21, 0, 0, 0, 0, timeJst), FixedDt: time.Date(2022, 11, 22, 0, 0, 0, 0, timeJst), SP: 1},
-			{CreateDt: time.Date(2022, 11, 23, 0, 0, 0, 0, timeJst), SP: 1},
-			{CreateDt: time.Date(2022, 11, 25, 0, 0, 0, 0, timeJst), SP: 1},
+			{createDt: time.Date(2022, 11, 21, 0, 0, 0, 0, timeJst), fixedDt: time.Date(2022, 11, 22, 0, 0, 0, 0, timeJst), sp: 1},
+			{createDt: time.Date(2022, 11, 23, 0, 0, 0, 0, timeJst), sp: 1},
+			{createDt: time.Date(2022, 11, 25, 0, 0, 0, 0, timeJst), sp: 1},
 		},
 	}
 	now := time.Date(2022, 11, 25, 0, 0, 0, 0, timeJst)
@@ -152,9 +152,9 @@ func TestMostEarlyDt(t *testing.T) {
 			tasklist: Tasks{
 				name: "TestMostEarlyDt",
 				list: []*Task{
-					{CreateDt: time.Date(2022, 11, 21, 0, 0, 0, 0, timeJst), SP: 1},
-					{CreateDt: time.Date(2022, 11, 20, 0, 0, 0, 0, timeJst), SP: 1},
-					{CreateDt: time.Date(2022, 11, 22, 0, 0, 0, 0, timeJst), SP: 1},
+					{createDt: time.Date(2022, 11, 21, 0, 0, 0, 0, timeJst), sp: 1},
+					{createDt: time.Date(2022, 11, 20, 0, 0, 0, 0, timeJst), sp: 1},
+					{createDt: time.Date(2022, 11, 22, 0, 0, 0, 0, timeJst), sp: 1},
 				},
 			},
 			now:     time.Date(2022, 11, 28, 0, 0, 0, 0, timeJst),
