@@ -10,7 +10,7 @@ var timeJst, _ = time.LoadLocation("Asia/Tokyo")
 
 func TestSort(t *testing.T) {
 	tl := &TasksList{
-		List: []Tasks{
+		list: []Tasks{
 			{Name: "task5"},
 			{Name: "task0"},
 			{Name: "task3"},
@@ -18,7 +18,7 @@ func TestSort(t *testing.T) {
 		},
 	}
 	expects := &TasksList{
-		List: []Tasks{
+		list: []Tasks{
 			{Name: "task0"},
 			{Name: "task1"},
 			{Name: "task3"},

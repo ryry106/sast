@@ -6,7 +6,7 @@ import (
 )
 
 type TasksList struct {
-	List []Tasks
+	list []Tasks
 }
 
 type Tasks struct {
@@ -21,16 +21,16 @@ type Task struct {
 }
 
 func NewTasksList(list []Tasks) *TasksList {
-	return &TasksList{List: list}
+	return &TasksList{list: list}
 }
 
 func (tl *TasksList) Sort() *TasksList {
 	var csvNameList []string
-	for _, t := range tl.List {
+	for _, t := range tl.list {
 		csvNameList = append(csvNameList, t.Name)
 	}
 	sort.Strings(csvNameList)
-	return NewTasksList(sortTasksList(tl.List, csvNameList))
+	return NewTasksList(sortTasksList(tl.list, csvNameList))
 }
 
 func sortTasksList(tasksList []Tasks, csvList []string) []Tasks {
@@ -48,7 +48,7 @@ func sortTasksList(tasksList []Tasks, csvList []string) []Tasks {
 
 func (tl *TasksList) ToSPDailyLists(start time.Time, end time.Time) *SPDailyLists {
 	var sl []SPDailyList
-	for _, t := range tl.List {
+	for _, t := range tl.list {
 		sl = append(sl, *t.toSPDailyList(start, end))
 	}
 	return NewSPDailyLists(sl)
@@ -56,7 +56,7 @@ func (tl *TasksList) ToSPDailyLists(start time.Time, end time.Time) *SPDailyList
 
 func (tl *TasksList) ToSPDailyListsEntirePeriod(now time.Time) *SPDailyLists {
 	var sl []SPDailyList
-	for _, t := range tl.List {
+	for _, t := range tl.list {
 		sl = append(sl, *t.toSPDailyListEntirePeriod(now))
 	}
 	return NewSPDailyLists(sl)
