@@ -6,7 +6,7 @@ import (
 	"html/template"
 	"net/http"
 	"os"
-	"sast/model"
+	"sast/infra"
 	"strconv"
 	"time"
 
@@ -75,10 +75,11 @@ func newResourceHandler(csvDir string, startDt string) (*resourceHandler, error)
 }
 
 func (r *resourceHandler) handle(c echo.Context) error {
-	tl, err := model.NewTasksListFromCSVDir(r.csvDir)
+	res, err := infra.ParseFromCSVDir(r.csvDir)
 	if err != nil {
 		return c.String(http.StatusInternalServerError, err.Error())
 	}
+	tl := res.ToTasksList().Sort()
 
 	tz, err := time.LoadLocation("Asia/Tokyo")
 	if err != nil {
