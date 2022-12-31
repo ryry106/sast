@@ -11,18 +11,18 @@ var timeJst, _ = time.LoadLocation("Asia/Tokyo")
 func TestSort(t *testing.T) {
 	tl := &TasksList{
 		list: []Tasks{
-			{Name: "task5"},
-			{Name: "task0"},
-			{Name: "task3"},
-			{Name: "task1"},
+			{name: "task5"},
+			{name: "task0"},
+			{name: "task3"},
+			{name: "task1"},
 		},
 	}
 	expects := &TasksList{
 		list: []Tasks{
-			{Name: "task0"},
-			{Name: "task1"},
-			{Name: "task3"},
-			{Name: "task5"},
+			{name: "task0"},
+			{name: "task1"},
+			{name: "task3"},
+			{name: "task5"},
 		},
 	}
 	actual := tl.Sort()
@@ -34,8 +34,8 @@ func TestSort(t *testing.T) {
 
 func TestToSPDailyList(t *testing.T) {
 	tl := Tasks{
-		Name: "ToSPDailyList",
-		List: []Task{
+		name: "ToSPDailyList",
+		list: []Task{
 			{CreateDt: time.Date(2022, 11, 21, 0, 0, 0, 0, timeJst), FixedDt: time.Date(2022, 11, 22, 0, 0, 0, 0, timeJst), SP: 1},
 			{CreateDt: time.Date(2022, 11, 22, 0, 0, 0, 0, timeJst), FixedDt: time.Date(2022, 11, 23, 0, 0, 0, 0, timeJst), SP: 1},
 			{CreateDt: time.Date(2022, 11, 23, 0, 0, 0, 0, timeJst), SP: 1},
@@ -116,8 +116,8 @@ func TestToSPDailyList(t *testing.T) {
 
 func TestToSPDailyListEntirePeriod(t *testing.T) {
 	tl := Tasks{
-		Name: "ToSPDailyListEntirePeriod",
-		List: []Task{
+		name: "ToSPDailyListEntirePeriod",
+		list: []Task{
 			{CreateDt: time.Date(2022, 11, 21, 0, 0, 0, 0, timeJst), FixedDt: time.Date(2022, 11, 22, 0, 0, 0, 0, timeJst), SP: 1},
 			{CreateDt: time.Date(2022, 11, 23, 0, 0, 0, 0, timeJst), SP: 1},
 			{CreateDt: time.Date(2022, 11, 25, 0, 0, 0, 0, timeJst), SP: 1},
@@ -150,8 +150,8 @@ func TestMostEarlyDt(t *testing.T) {
 		{
 			name: "second is early date",
 			tasklist: Tasks{
-				Name: "TestMostEarlyDt",
-				List: []Task{
+				name: "TestMostEarlyDt",
+				list: []Task{
 					{CreateDt: time.Date(2022, 11, 21, 0, 0, 0, 0, timeJst), SP: 1},
 					{CreateDt: time.Date(2022, 11, 20, 0, 0, 0, 0, timeJst), SP: 1},
 					{CreateDt: time.Date(2022, 11, 22, 0, 0, 0, 0, timeJst), SP: 1},
@@ -163,8 +163,8 @@ func TestMostEarlyDt(t *testing.T) {
 		{
 			name: "return now",
 			tasklist: Tasks{
-				Name: "TestMostEarlyDt",
-				List: []Task{},
+				name: "TestMostEarlyDt",
+				list: []Task{},
 			},
 			now:     time.Date(2022, 11, 28, 0, 0, 0, 0, timeJst),
 			expects: time.Date(2022, 11, 28, 0, 0, 0, 0, timeJst),

@@ -44,7 +44,7 @@ func (rp *resultParsedCSVDir) ToTasksList() *model.TasksList {
 }
 
 func (rp *resultParsedCSV) Errors() (string, []parseError) {
-	return rp.t.Name, rp.e
+	return rp.t.Name(), rp.e
 }
 
 func ParseFromCSVDir(dirPath string) (*resultParsedCSVDir, error) {
@@ -92,7 +92,7 @@ func parseCSV(path string) resultParsedCSV {
 		list = append(list, model.Task{SP: sp, CreateDt: cd, FixedDt: fd})
 	}
 
-	return resultParsedCSV{t: &model.Tasks{Name: path, List: list}, e: errors}
+	return resultParsedCSV{t: model.NewTasks(path, list), e: errors}
 }
 
 func parseCSVRow(line string) (int, time.Time, time.Time, error) {

@@ -10,8 +10,8 @@ type TasksList struct {
 }
 
 type Tasks struct {
-	Name string
-	List []Task
+	name string
+	list []Task
 }
 
 type Task struct {
@@ -20,14 +20,22 @@ type Task struct {
 	FixedDt  time.Time
 }
 
+func NewTasks(name string, list []Task) *Tasks {
+	return &Tasks{name: name, list: list}
+}
+
 func NewTasksList(list []Tasks) *TasksList {
 	return &TasksList{list: list}
+}
+
+func (t *Tasks) Name() string {
+	return t.name
 }
 
 func (tl *TasksList) Sort() *TasksList {
 	var csvNameList []string
 	for _, t := range tl.list {
-		csvNameList = append(csvNameList, t.Name)
+		csvNameList = append(csvNameList, t.name)
 	}
 	sort.Strings(csvNameList)
 	return NewTasksList(sortTasksList(tl.list, csvNameList))
@@ -37,7 +45,7 @@ func sortTasksList(tasksList []Tasks, csvList []string) []Tasks {
 	var res []Tasks
 	for _, csv := range csvList {
 		for _, tasks := range tasksList {
-			if csv == tasks.Name {
+			if csv == tasks.name {
 				res = append(res, tasks)
 				break
 			}
@@ -67,11 +75,11 @@ func (tl *Tasks) toSPDailyListEntirePeriod(end time.Time) *SPDailyList {
 }
 
 func (tl *Tasks) toSPDailyList(start time.Time, end time.Time) *SPDailyList {
-	return tl.calculateSP(*NewSPDailyList(tl.Name, start, end))
+	return tl.calculateSP(*NewSPDailyList(tl.name, start, end))
 }
 
 func (tl *Tasks) calculateSP(spdl SPDailyList) *SPDailyList {
-	for _, task := range tl.List {
+	for _, task := range tl.list {
 		for i, spd := range spdl.List {
 			if isAddSP(spd.Dt, task) {
 				spdl.List[i].SP += task.SP
@@ -83,7 +91,7 @@ func (tl *Tasks) calculateSP(spdl SPDailyList) *SPDailyList {
 
 func (tl *Tasks) mostEarlyDt(now time.Time) time.Time {
 	var mostEarlyDt = now
-	for _, task := range tl.List {
+	for _, task := range tl.list {
 		if mostEarlyDt.After(task.CreateDt) {
 			mostEarlyDt = task.CreateDt
 		}

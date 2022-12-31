@@ -13,29 +13,20 @@ func TestToTasksList(t *testing.T) {
 	rp := resultParsedCSVDir{
 		list: []resultParsedCSV{
 			{
-				t: &model.Tasks{
-					Name: "tasks1",
-					List: []model.Task{{SP: 3, CreateDt: time.Date(2022, 11, 3, 0, 0, 0, 0, timeJst), FixedDt: time.Date(2022, 11, 13, 0, 0, 0, 0, timeJst)}},
-				},
+				t: model.NewTasks("tasks1", []model.Task{{SP: 3, CreateDt: time.Date(2022, 11, 3, 0, 0, 0, 0, timeJst), FixedDt: time.Date(2022, 11, 13, 0, 0, 0, 0, timeJst)}}),
 			},
 			{
-				t: &model.Tasks{
-					Name: "tasks2",
-					List: []model.Task{{SP: 1, CreateDt: time.Date(2022, 11, 1, 0, 0, 0, 0, timeJst), FixedDt: time.Date(2022, 11, 10, 0, 0, 0, 0, timeJst)}},
-				},
+				t: model.NewTasks("tasks2", []model.Task{{SP: 1, CreateDt: time.Date(2022, 11, 1, 0, 0, 0, 0, timeJst), FixedDt: time.Date(2022, 11, 10, 0, 0, 0, 0, timeJst)}}),
 			},
 			{
-				t: &model.Tasks{
-					Name: "tasks3",
-					List: []model.Task{{SP: 5, CreateDt: time.Date(2022, 12, 1, 0, 0, 0, 0, timeJst), FixedDt: time.Date(2022, 12, 10, 0, 0, 0, 0, timeJst)}},
-				},
+				t: model.NewTasks("tasks3", []model.Task{{SP: 5, CreateDt: time.Date(2022, 12, 1, 0, 0, 0, 0, timeJst), FixedDt: time.Date(2022, 12, 10, 0, 0, 0, 0, timeJst)}}),
 			},
 		},
 	}
 	expects := model.NewTasksList([]model.Tasks{
-		{Name: "tasks1", List: []model.Task{{SP: 3, CreateDt: time.Date(2022, 11, 3, 0, 0, 0, 0, timeJst), FixedDt: time.Date(2022, 11, 13, 0, 0, 0, 0, timeJst)}}},
-		{Name: "tasks2", List: []model.Task{{SP: 1, CreateDt: time.Date(2022, 11, 1, 0, 0, 0, 0, timeJst), FixedDt: time.Date(2022, 11, 10, 0, 0, 0, 0, timeJst)}}},
-		{Name: "tasks3", List: []model.Task{{SP: 5, CreateDt: time.Date(2022, 12, 1, 0, 0, 0, 0, timeJst), FixedDt: time.Date(2022, 12, 10, 0, 0, 0, 0, timeJst)}}},
+		*model.NewTasks("tasks1", []model.Task{{SP: 3, CreateDt: time.Date(2022, 11, 3, 0, 0, 0, 0, timeJst), FixedDt: time.Date(2022, 11, 13, 0, 0, 0, 0, timeJst)}}),
+		*model.NewTasks("tasks2", []model.Task{{SP: 1, CreateDt: time.Date(2022, 11, 1, 0, 0, 0, 0, timeJst), FixedDt: time.Date(2022, 11, 10, 0, 0, 0, 0, timeJst)}}),
+		*model.NewTasks("tasks3", []model.Task{{SP: 5, CreateDt: time.Date(2022, 12, 1, 0, 0, 0, 0, timeJst), FixedDt: time.Date(2022, 12, 10, 0, 0, 0, 0, timeJst)}}),
 	})
 
 	actual := rp.ToTasksList()
@@ -47,14 +38,14 @@ func TestToTasksList(t *testing.T) {
 func TestParseCSV(t *testing.T) {
 	timeJst, _ = time.LoadLocation("Asia/Tokyo")
 	expects := resultParsedCSV{
-		t: &model.Tasks{
-			Name: "tests/source_csv.csv",
-			List: []model.Task{
+		t: model.NewTasks(
+			"tests/source_csv.csv",
+			[]model.Task{
 				{SP: 1, CreateDt: time.Date(2022, 11, 1, 0, 0, 0, 0, timeJst), FixedDt: time.Date(2022, 11, 10, 0, 0, 0, 0, timeJst)},
 				{SP: 2, CreateDt: time.Date(2022, 11, 1, 0, 0, 0, 0, timeJst)},
 				{SP: 3, CreateDt: time.Date(2022, 11, 4, 0, 0, 0, 0, timeJst), FixedDt: time.Date(2022, 11, 8, 0, 0, 0, 0, timeJst)},
 			},
-		},
+		),
 	}
 	actual := parseCSV("tests/source_csv.csv")
 	if !reflect.DeepEqual(actual.t, expects.t) {
@@ -67,34 +58,34 @@ func TestParseFromCSVDir(t *testing.T) {
 	expects := resultParsedCSVDir{
 		list: []resultParsedCSV{
 			{
-				t: &model.Tasks{
-					Name: "tests/tgtdir/source1.csv",
-					List: []model.Task{
+				t: model.NewTasks(
+					"tests/tgtdir/source1.csv",
+					[]model.Task{
 						{SP: 3, CreateDt: time.Date(2022, 11, 3, 0, 0, 0, 0, timeJst), FixedDt: time.Date(2022, 11, 13, 0, 0, 0, 0, timeJst)},
 						{SP: 1, CreateDt: time.Date(2022, 11, 3, 0, 0, 0, 0, timeJst)},
 						{SP: 2, CreateDt: time.Date(2022, 11, 4, 0, 0, 0, 0, timeJst), FixedDt: time.Date(2022, 11, 11, 0, 0, 0, 0, timeJst)},
 					},
-				},
+				),
 			},
 			{
-				t: &model.Tasks{
-					Name: "tests/tgtdir/source2.csv",
-					List: []model.Task{
+				t: model.NewTasks(
+					"tests/tgtdir/source2.csv",
+					[]model.Task{
 						{SP: 1, CreateDt: time.Date(2022, 11, 1, 0, 0, 0, 0, timeJst), FixedDt: time.Date(2022, 11, 10, 0, 0, 0, 0, timeJst)},
 						{SP: 2, CreateDt: time.Date(2022, 11, 1, 0, 0, 0, 0, timeJst)},
 						{SP: 3, CreateDt: time.Date(2022, 11, 4, 0, 0, 0, 0, timeJst), FixedDt: time.Date(2022, 11, 8, 0, 0, 0, 0, timeJst)},
 					},
-				},
+				),
 			},
 			{
-				t: &model.Tasks{
-					Name: "tests/tgtdir/tmp/source3.csv",
-					List: []model.Task{
+				t: model.NewTasks(
+					"tests/tgtdir/tmp/source3.csv",
+					[]model.Task{
 						{SP: 5, CreateDt: time.Date(2022, 12, 1, 0, 0, 0, 0, timeJst), FixedDt: time.Date(2022, 12, 10, 0, 0, 0, 0, timeJst)},
 						{SP: 1, CreateDt: time.Date(2022, 12, 1, 0, 0, 0, 0, timeJst)},
 						{SP: 3, CreateDt: time.Date(2022, 12, 4, 0, 0, 0, 0, timeJst), FixedDt: time.Date(2022, 12, 8, 0, 0, 0, 0, timeJst)},
 					},
-				},
+				),
 			},
 		},
 	}
