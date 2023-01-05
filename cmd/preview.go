@@ -4,8 +4,9 @@ Copyright © 2022 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
+	"sast/usecase"
+
 	"github.com/spf13/cobra"
-	"sast/preview"
 )
 
 // previewCmd represents the preview command
@@ -17,8 +18,7 @@ var previewCmd = &cobra.Command{
 		port, _ := cmd.Flags().GetInt("port")
 		templateName, _ := cmd.Flags().GetString("template-name")
 		startDate, _ := cmd.Flags().GetString("start-date")
-		serv := &preview.Serv{CsvDir: args[0], Port: port, TemplateName: templateName, StartDate: startDate}
-		serv.Up()
+		usecase.NewPreviewOption(args[0], port, templateName, startDate).Do()
 	},
 }
 
