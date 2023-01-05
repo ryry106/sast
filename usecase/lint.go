@@ -1,9 +1,10 @@
 package usecase
 
 import (
-	"fmt"
+	"errors"
 	"io"
 	"sast/infra"
+	"sast/presenter"
 )
 
 type Lint struct {
@@ -21,13 +22,11 @@ func (l *Lint) Do(out io.Writer) {
 	}
 
 	for _, r := range res.List() {
-		csv, errors := r.Errors()
-		if len(errors) == 0 {
-			continue
+		csv, es := r.Errors()
+		var errorList []error
+		for _, e := range es {
+			errorList = append(errorList, errors.New(e.String()))
 		}
-		fmt.Fprintln(out, csv)
-		for _, e := range errors {
-			fmt.Fprintln(out, "    "+e.String())
-		}
+		presenter.OutPut(csv, errorList, out)
 	}
 }
