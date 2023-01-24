@@ -13,7 +13,20 @@ import (
 var previewCmd = &cobra.Command{
 	Use:   "preview",
 	Short: "display burndownchart from csv files in target dir.",
-	Long:  "display burndownchart from csv files in target dir.",
+	Long:  `display burndownchart from csv files in target dir.
+the format of the csv is written next
+"""
+story point, start date, resolve date
+:
+:
+"""
+ex)
+"""
+1,2022-12-02,2022-12-03
+2,2022-12-02,
+3,2022-12-05,2022-12-06
+"""
+`,
 	Run: func(cmd *cobra.Command, args []string) {
 		port, _ := cmd.Flags().GetInt("port")
 		templateName, _ := cmd.Flags().GetString("template-name")
